@@ -4,8 +4,8 @@ namespace Sashalenz\Wireforms;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
-use Sashalenz\Wireforms\Fields\Field;
 use LivewireUI\Modal\ModalComponent;
+use Sashalenz\Wireforms\Fields\Field;
 use Sashalenz\Wireforms\Traits\HasChild;
 
 abstract class Form extends ModalComponent
@@ -17,33 +17,34 @@ abstract class Form extends ModalComponent
     protected string $title;
 
     abstract protected function title(): string;
+
     abstract protected function fields(): array;
 
     public function rules(): array
     {
         return collect($this->fields())
-            ->filter(fn(Field $field) => $field->hasRules())
-            ->mapWithKeys(fn(Field $field) => ["model.{$field->getName()}" => $field->getRules()])
+            ->filter(fn (Field $field) => $field->hasRules())
+            ->mapWithKeys(fn (Field $field) => ["model.{$field->getName()}" => $field->getRules()])
             ->toArray();
     }
 
     protected function defaults(): array
     {
         return collect($this->fields())
-            ->filter(fn(Field $field) => !is_null($field->getDefault()))
-            ->mapWithKeys(fn(Field $field) => [$field->getName() => $field->getDefault()])
+            ->filter(fn (Field $field) => ! is_null($field->getDefault()))
+            ->mapWithKeys(fn (Field $field) => [$field->getName() => $field->getDefault()])
             ->toArray();
     }
 
     public function updated(string $field): void
     {
         $rules = collect($this->rules())
-            ->filter(fn($value, $key) => $key === $field)
-            ->mapWithKeys(fn($rules, $key) => [
+            ->filter(fn ($value, $key) => $key === $field)
+            ->mapWithKeys(fn ($rules, $key) => [
                 $key => collect($rules)
-                    ->reject(fn($rule) => in_array($rule, ['required', 'confirmed']))
+                    ->reject(fn ($rule) => in_array($rule, ['required', 'confirmed']))
                     ->values()
-                    ->toArray()
+                    ->toArray(),
             ])
             ->toArray();
 
@@ -77,7 +78,7 @@ abstract class Form extends ModalComponent
 
             $this->dispatchBrowserEvent('alert', [
                 'status' => 'success',
-                'message' => __('wireforms::successfully_saved')
+                'message' => __('wireforms::successfully_saved'),
             ]);
 
             $this->forceClose()->closeModal();
@@ -88,7 +89,7 @@ abstract class Form extends ModalComponent
             $this->dispatchBrowserEvent('alert', [
                 'status' => 'error',
                 'message' => __('wireforms::unable_to_save'),
-                'description' => $exception->getMessage()
+                'description' => $exception->getMessage(),
             ]);
         }
     }

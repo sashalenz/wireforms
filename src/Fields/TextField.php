@@ -19,12 +19,14 @@ class TextField extends Field
     public function icon(string $icon): self
     {
         $this->icon = $icon;
+
         return $this;
     }
 
     public function type(string $type): self
     {
         $this->type = $type;
+
         return $this;
     }
 

@@ -17,6 +17,7 @@ class TextareaField extends Field
     public function rows(int $rows): self
     {
         $this->rows = $rows;
+
         return $this;
     }
 
