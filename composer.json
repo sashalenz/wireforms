@@ -33,8 +33,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Sashalenz\\Wireforms\\": "src",
-            "Sashalenz\\Wireforms\\Database\\Factories\\": "database/factories"
+            "Sashalenz\\Wireforms\\": "src"
         }
     },
     "autoload-dev": {
@@ -43,7 +42,6 @@
         }
     },
     "scripts": {
-        "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage"
     },
@@ -57,10 +55,7 @@
         "laravel": {
             "providers": [
                 "Sashalenz\\Wireforms\\WireformsServiceProvider"
-            ],
-            "aliases": {
-                "Wireforms": "Sashalenz\\Wireforms\\Facades\\Wireforms"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",
