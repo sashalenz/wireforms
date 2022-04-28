@@ -5,7 +5,7 @@ namespace Sashalenz\Wireforms;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use LivewireUI\Modal\ModalComponent;
-use Sashalenz\Wireforms\Fields\Field;
+use Sashalenz\Wireforms\FormFields\Field;
 use Sashalenz\Wireforms\Traits\HasChild;
 
 abstract class Form extends ModalComponent

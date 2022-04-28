@@ -1,4 +1,4 @@
-<div class="border border-primary">
+<div class="border border-primary-300">
     <div class="bg-primary-500 text-white flex justify-between items-center px-4 py-3">
         <h4 class="text-base">{{ $this->title }}</h4>
         <button type="button" class="text-white text-xl font-bold" wire:click="$emit('closeModal')">

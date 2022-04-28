@@ -1,6 +1,6 @@
 <?php
 
-namespace Sashalenz\Wireforms\Fields;
+namespace Sashalenz\Wireforms\FormFields;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Sashalenz\Wireforms\Fields;
+namespace Sashalenz\Wireforms\FormFields;
 
 use Illuminate\Contracts\View\View;
 
@@ -17,14 +17,14 @@ class SelectField extends Field
         parent::__construct($name, $title, $value, $required, $placeholder, $default, $help, $size);
     }
 
-    public function setOptions(array $options): self
+    public function options(array $options): self
     {
         $this->options = $options;
 
         return $this;
     }
 
-    public function isNullable(): self
+    public function nullable(): self
     {
         $this->nullable = true;
 
