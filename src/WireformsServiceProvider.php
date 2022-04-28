@@ -19,7 +19,7 @@ class WireformsServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->loadViewComponentsAs('wireforms', [
-            Text::class
+            Text::class,
         ]);
     }
 }
