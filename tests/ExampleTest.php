@@ -1,5 +1,7 @@
 <?php
 
-it('can test', static function () {
+it('can test', function () {
+    $this->assertTrue(true);
+
     expect(true)->toBeTrue();
 });
