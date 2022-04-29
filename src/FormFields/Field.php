@@ -175,9 +175,9 @@ abstract class Field extends Component
         return $value;
     }
 
-    public static function make(...$attributes): static
+    public static function make(string $name, ?string $title): static
     {
-        return new static(...$attributes);
+        return new static($name, $title);
     }
 
     public function renderIt(?Model $model = null): ?View
