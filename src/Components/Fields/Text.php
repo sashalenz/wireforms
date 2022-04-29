@@ -20,7 +20,8 @@ class Text extends Component
         public ?string $help = null,
         public ?string $prepend = null,
         public ?string $append = null
-    ) { }
+    ) {
+    }
 
     private function getId(): string
     {
