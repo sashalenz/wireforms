@@ -31,7 +31,6 @@ class SelectField extends FormField
             value: $this->castValue($this->value),
             label: $this->label,
             required: $this->required,
-
         );
     }
 }

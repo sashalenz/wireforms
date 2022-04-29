@@ -108,11 +108,11 @@ abstract class FormField extends Component implements FormFieldContract
 
     protected function getClass(?Model $model = null): ?string
     {
-        $class = is_callable($this->styleCallback) && !is_null($model)
+        $class = is_callable($this->styleCallback) && ! is_null($model)
             ? call_user_func($this->styleCallback, $model)
             : null;
 
-        if (!is_string($class) && !is_null($class)) {
+        if (! is_string($class) && ! is_null($class)) {
             throw new RuntimeException('Return value must be a string');
         }
 
@@ -146,7 +146,7 @@ abstract class FormField extends Component implements FormFieldContract
 
         return $this->render()
             ->withAttributes([
-                'class' => $this->getClass($model)
+                'class' => $this->getClass($model),
             ]);
     }
 }

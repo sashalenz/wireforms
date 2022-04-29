@@ -17,7 +17,6 @@ class Text extends Field
         ?string $locale = null,
         ?string $placeholder = null,
         ?string $help = null,
-
         public string $type = 'text',
         public ?string $prepend = null,
         public ?string $append = null

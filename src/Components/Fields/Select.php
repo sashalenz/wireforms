@@ -17,7 +17,6 @@ class Select extends Field
         ?string $locale = null,
         ?string $placeholder = null,
         ?string $help = null,
-
         public array $options = [],
         public bool $nullable = false,
         public bool $multiple = false
