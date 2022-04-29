@@ -3,19 +3,12 @@
 namespace Sashalenz\Wireforms\FormFields;
 
 use Illuminate\Contracts\View\View;
+use Sashalenz\Wireforms\Components\Fields\Select;
 
-class SelectField extends Field
+class SelectField extends FormField
 {
-    public array $options = [];
-    public bool $nullable = false;
-
-    public function __construct(string $name, ?string $title = null, $value = null, ?bool $required = false, ?string $placeholder = null, ?string $default = null, ?string $help = null, ?int $size = 6, array $options = [], bool $nullable = false)
-    {
-        $this->options = $options;
-        $this->nullable = $nullable;
-
-        parent::__construct($name, $title, $value, $required, $placeholder, $default, $help, $size);
-    }
+    protected array $options = [];
+    protected bool $nullable = false;
 
     public function options(array $options): self
     {
@@ -33,6 +26,12 @@ class SelectField extends Field
 
     public function render(): View
     {
-        return view('wireforms::field.select-field');
+        return Select::make(
+            name: $this->name,
+            value: $this->castValue($this->value),
+            label: $this->label,
+            required: $this->required,
+
+        );
     }
 }

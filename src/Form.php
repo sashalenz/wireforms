@@ -5,7 +5,7 @@ namespace Sashalenz\Wireforms;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use LivewireUI\Modal\ModalComponent;
-use Sashalenz\Wireforms\FormFields\Field;
+use Sashalenz\Wireforms\Contracts\FormFieldContract;
 use Sashalenz\Wireforms\Traits\HasChild;
 
 abstract class Form extends ModalComponent
@@ -23,8 +23,8 @@ abstract class Form extends ModalComponent
     public function rules(): array
     {
         return collect($this->fields())
-            ->filter(fn (Field $field) => $field->hasRules())
-            ->mapWithKeys(fn (Field $field) => ["model.{$field->getName()}" => $field->getRules()])
+            ->filter(fn (FormFieldContract $field) => $field->hasRules())
+            ->mapWithKeys(fn (FormFieldContract $field) => ["model.{$field->getName()}" => $field->getRules()])
             ->toArray();
     }
 
