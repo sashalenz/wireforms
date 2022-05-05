@@ -15,7 +15,8 @@ class Primary extends Component implements ButtonContract
         public bool $outline = false,
         public ?string $icon = null,
         public ?string $title = null
-    ) { }
+    ) {
+    }
 
     public function render(): View
     {

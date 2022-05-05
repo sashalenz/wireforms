@@ -48,8 +48,8 @@ abstract class Form extends ModalComponent
     public function updated(string $field): void
     {
         $rules = collect($this->rules())
-            ->filter(fn($value, $key) => $key === $field)
-            ->mapWithKeys(fn($rules, $key) => [
+            ->filter(fn ($value, $key) => $key === $field)
+            ->mapWithKeys(fn ($rules, $key) => [
                 $key => collect($rules)
                     ->diff(['required', 'confirmed'])
                     ->all(),
@@ -90,9 +90,8 @@ abstract class Form extends ModalComponent
             ]);
 
             $this->forceClose()->closeModalWithEvents([
-                '$refresh'
+                '$refresh',
             ]);
-
         } catch (\RuntimeException $exception) {
             $this->dispatchBrowserEvent('alert', [
                 'status' => 'error',
@@ -107,10 +106,10 @@ abstract class Form extends ModalComponent
         return view('wireforms::form', [
             'title' => collect([
                 $this->title(),
-                $this->model->getKey()
+                $this->model->getKey(),
             ])
                 ->filter()
-                ->implode(' №')
+                ->implode(' №'),
         ]);
     }
 }

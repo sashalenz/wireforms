@@ -3,6 +3,7 @@
 namespace Sashalenz\Wireforms;
 
 use Livewire\Livewire;
+use Sashalenz\Wireforms\Components\Fields\NestedSetSelect;
 use Sashalenz\Wireforms\Components\Fields\Select;
 use Sashalenz\Wireforms\Components\Fields\Text;
 use Sashalenz\Wireforms\Components\Fields\Textarea;
@@ -26,7 +27,8 @@ class WireformsServiceProvider extends PackageServiceProvider
             Text::class,
             Textarea::class,
             Select::class,
-            WireSelect::class
+            WireSelect::class,
+            NestedSetSelect::class
         ]);
 
         Livewire::component('wireforms.livewire.wire-select', \Sashalenz\Wireforms\Livewire\WireSelect::class);

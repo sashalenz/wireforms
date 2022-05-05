@@ -66,12 +66,12 @@ class NestedSetSelect extends ModelSelect
         );
     }
 
-    public function getSelectedValueProperty():? string
+    public function getSelectedValueProperty(): ?string
     {
         return $this->selected()?->getKey();
     }
 
-    public function getSelectedTitleProperty():? string
+    public function getSelectedTitleProperty(): ?string
     {
         if (is_null($this->selected())) {
             return null;
@@ -83,9 +83,9 @@ class NestedSetSelect extends ModelSelect
             ->implode('name', ' > ');
     }
 
-    public function getModelKeyNameProperty():? string
+    public function getModelKeyNameProperty(): ?string
     {
-        return (new $this->model)->getKeyName();
+        return (new $this->model())->getKeyName();
     }
 
     private function searchQuery(): Builder
@@ -99,7 +99,7 @@ class NestedSetSelect extends ModelSelect
 
     public function getResultsProperty(): Collection
     {
-        if (!$this->isOpen || !$this->showResults()) {
+        if (! $this->isOpen || ! $this->showResults()) {
             return collect();
         }
 
@@ -117,7 +117,7 @@ class NestedSetSelect extends ModelSelect
                             )
                     )
                     ->with([
-                        'sortedChildren' => fn ($query) => $query->tap(new SearchFilter($this->search))
+                        'sortedChildren' => fn ($query) => $query->tap(new SearchFilter($this->search)),
                     ])
             )
             ->orderBy(

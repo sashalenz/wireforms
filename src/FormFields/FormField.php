@@ -120,11 +120,11 @@ abstract class FormField implements FormFieldContract
         return $this;
     }
 
-    protected function getClass(?Model $model = null):? string
+    protected function getClass(?Model $model = null): ?string
     {
         return collect($this->classes)
             ->when(
-                is_callable($this->styleCallback) && !is_null($model),
+                is_callable($this->styleCallback) && ! is_null($model),
                 fn ($class) => $class->push((string)call_user_func($this->styleCallback, $model))
             )
             ->when(
@@ -170,7 +170,7 @@ abstract class FormField implements FormFieldContract
             ->all();
     }
 
-    public function renderIt(?Model $model = null):? View
+    public function renderIt(?Model $model = null): ?View
     {
         $condition = is_callable($this->displayCondition)
             ? call_user_func($this->displayCondition, $model)
