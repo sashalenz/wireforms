@@ -9,7 +9,7 @@
 >
     <div class="flex items-center">
         <livewire:wireforms.livewire.wire-select
-            :name="$attributes->thatStartWith('wire:model')->first() ?? $name"
+            :name="$id"
             :model="$model"
             :required="$required"
             :placeholder="$placeholder"
@@ -20,14 +20,5 @@
             :value="$value"
             :key="'wireselect-'.$name"
         />
-{{--        @isset($createNewRoute)--}}
-{{--            <x-admin.button.primary--}}
-{{--                data-action="{{ $createNewRoute }}"--}}
-{{--                data-toggle="modal"--}}
-{{--                data-target="#modal"--}}
-{{--            >--}}
-{{--                <i class="far fa-plus"></i>--}}
-{{--            </x-admin.button.primary>--}}
-{{--        @endisset--}}
     </div>
 </x-wireforms::fields>

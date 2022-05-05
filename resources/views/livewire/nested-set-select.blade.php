@@ -60,23 +60,34 @@
                         class="max-h-60 pt-1 text-base leading-6 overflow-auto focus:outline-none sm:text-sm sm:leading-5"
                     >
                         @forelse($this->results as $key => $value)
-                            <li id="listbox-option-{{ $key }}"
+                            <li id="listbox-option-null"
                                 role="option"
-                                class="group text-gray-900 focus:text-white focus:bg-primary-600 hover:text-white hover:bg-primary-600 cursor-pointer select-none relative py-2 pl-3 pr-9"
-                                wire:key="listbox-option-{{ $key }}"
-                                x-on:click.prevent="$wire.call('setSelected', '{{ $key }}')"
+                                class="group uppercase text-xs text-gray-300 cursor-default select-none relative py-1 pl-3"
+                                wire:key="listbox-optgroup-{{ $key }}"
                             >
-                                <span @class(['block truncate', 'font-semibold' => $this->isCurrent($key)])>
-                                    {{ $value }}
-                                </span>
-                                @if($this->isCurrent($key))
-                                    <span class="text-primary-600 group-focus:text-white group-hover:text-white absolute inset-y-0 right-0 flex items-center pr-4">
+                                    <span class="font-semibold block truncate">
+                                        {{ $value['name'] }}
+                                    </span>
+                            </li>
+                            @foreach($value['children'] as $childKey => $childValue)
+                                <li id="listbox-option-{{ $childKey }}"
+                                    role="option"
+                                    class="group text-gray-900 focus:text-white focus:bg-primary-600 hover:text-white hover:bg-primary-600 cursor-pointer select-none relative py-2 pl-4 pr-9"
+                                    wire:key="listbox-option-{{ $childKey }}"
+                                    x-on:click.prevent="$wire.call('setSelected', '{{ $childKey }}')"
+                                >
+                                        <span @class(['block truncate', 'font-semibold' => $this->isCurrent($childKey)])>
+                                            {{ $childValue }}
+                                        </span>
+                                    @if($this->isCurrent($childKey))
+                                        <span class="text-primary-600 group-focus:text-white group-hover:text-white absolute inset-y-0 right-0 flex items-center pr-4">
                                             <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                                             </svg>
                                         </span>
-                                @endif
-                            </li>
+                                    @endif
+                                </li>
+                            @endforeach
                         @empty
                             <li id="listbox-option-null" role="option" class="group text-gray-500 cursor-default select-none relative py-2 pl-3 pr-9">
                                 <span class="font-normal block truncate">

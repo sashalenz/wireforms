@@ -22,8 +22,8 @@ class TextField extends FormField
     public function render(): FieldContract
     {
         return Text::make(
-            name: $this->getName(),
-            value: $this->castValue($this->value),
+            name: $this->getNameOrWireModel(),
+            value: $this->value,
             label: $this->label,
             type: $this->type,
             required: $this->required

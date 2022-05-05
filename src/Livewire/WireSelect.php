@@ -98,7 +98,7 @@ class WireSelect extends ModelSelect
         return $this->searchQuery()
             ->when(
                 $this->searchable,
-                fn ($query) => new SearchFilter($this->search)
+                new SearchFilter($this->search)
             )
             ->orderBy(
                 $this->getModelKeyNameProperty(),

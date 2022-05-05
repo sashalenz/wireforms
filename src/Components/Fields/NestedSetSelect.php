@@ -4,7 +4,7 @@ namespace Sashalenz\Wireforms\Components\Fields;
 
 use Illuminate\Contracts\View\View;
 
-class Wireselect extends Field
+class NestedSetSelect extends Field
 {
     public function __construct(
         string $name,
@@ -39,6 +39,7 @@ class Wireselect extends Field
 
     public function render(): View
     {
-        return view('wireforms::components.fields.wireselect')->with($this->data());
+        return view('wireforms::components.fields.nested-set-select')
+            ->with($this->data());
     }
 }

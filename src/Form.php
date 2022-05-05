@@ -3,6 +3,7 @@
 namespace Sashalenz\Wireforms;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use LivewireUI\Modal\ModalComponent;
 use Sashalenz\Wireforms\Contracts\FormFieldContract;
 use Sashalenz\Wireforms\Traits\HasChild;
@@ -11,7 +12,7 @@ abstract class Form extends ModalComponent
 {
     use HasChild;
 
-    abstract protected function fields(): array;
+    abstract protected function fields(): Collection;
     abstract protected function title(): string;
 
     public function beforeSave(): void
@@ -26,21 +27,25 @@ abstract class Form extends ModalComponent
 
     public function rules(): array
     {
-        return collect($this->fields())
+        return $this->fields
             ->filter(fn(FormFieldContract $field) => $field->hasRules())
-            ->mapWithKeys(fn(FormFieldContract $field) => ["model.{$field->getName()}" => $field->getRules()])
+            ->mapWithKeys(fn(FormFieldContract $field) => [
+                $field->getNameOrWireModel() => $field->getRules()
+            ])
             ->toArray();
     }
 
     protected function defaults(): array
     {
-        return collect($this->fields())
+        return $this->fields
             ->filter(fn(FormFieldContract $field) => !is_null($field->getDefault()))
-            ->mapWithKeys(fn(FormFieldContract $field) => [$field->getName() => $field->getDefault()])
+            ->mapWithKeys(fn(FormFieldContract $field) => [
+                $field->getName() => $field->getDefault()
+            ])
             ->toArray();
     }
 
-    public function updated(string $field, string $value): void
+    public function updated(string $field): void
     {
         $rules = collect($this->rules())
             ->filter(fn($value, $key) => $key === $field)
@@ -61,11 +66,12 @@ abstract class Form extends ModalComponent
         );
     }
 
-    public function getFieldsProperty(): array
+    public function getFieldsProperty(): Collection
     {
-        return collect($this->fields())
-            ->each(fn (FormFieldContract $field) => $field->wireModel("model.{$field->getName()}"))
-            ->toArray();
+        return $this->fields()
+            ->each(
+                fn (FormFieldContract $field) => $field->wireModel("model.{$field->getName()}")
+            );
     }
 
     public function save(): void

@@ -3,6 +3,7 @@
 namespace Sashalenz\Wireforms\Livewire;
 
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Sashalenz\Searchable\Filters\SearchFilter;
@@ -125,11 +126,24 @@ class NestedSetSelect extends ModelSelect
             )
             ->take($this->limit)
             ->get()
-            ->filter(fn ($item) => $item->sortedChildren->count());
+            ->filter(fn ($item) => $item->sortedChildren->count())
+            ->mapWithKeys(fn ($item) => [
+                $item->getKey() => [
+                    'name' => $item->getDisplayName(),
+                    'children' => $item->sortedChildren->mapWithKeys(fn ($child) => [
+                        $child->getKey() => $child->getDisplayName()
+                    ])
+                ]
+            ]);
     }
 
     public function isCurrent(string $key): bool
     {
         return $this->selected() && $key === $this->selectedValue;
+    }
+
+    public function render(): View
+    {
+        return view('wireforms::livewire.nested-set-select');
     }
 }

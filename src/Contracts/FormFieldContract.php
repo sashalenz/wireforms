@@ -9,6 +9,8 @@ interface FormFieldContract
 {
     public function getName(): string;
 
+    public function getNameOrWireModel(): string;
+
     public function getDefault(): string;
 
     public function getRules(): array;

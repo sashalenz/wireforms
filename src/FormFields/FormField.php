@@ -5,11 +5,14 @@ namespace Sashalenz\Wireforms\FormFields;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Traits\Conditionable;
 use Sashalenz\Wireforms\Contracts\FormFieldContract;
 
 abstract class FormField implements FormFieldContract
 {
-    protected $value = null;
+    use Conditionable;
+
+    protected $value;
     protected ?string $default = null;
 
     protected ?bool $required = false;
@@ -46,6 +49,7 @@ abstract class FormField implements FormFieldContract
     public function required(): self
     {
         $this->required = true;
+        $this->rules[] = 'required';
 
         return $this;
     }
@@ -145,6 +149,11 @@ abstract class FormField implements FormFieldContract
 
     public function getName(): string
     {
+        return $this->name;
+    }
+
+    public function getNameOrWireModel(): string
+    {
         return $this->wireModel ?? $this->name;
     }
 
@@ -155,7 +164,10 @@ abstract class FormField implements FormFieldContract
 
     public function getRules(): array
     {
-        return $this->rules;
+        return collect($this->rules)
+            ->flatten()
+            ->unique()
+            ->all();
     }
 
     public function renderIt(?Model $model = null):? View
@@ -178,7 +190,12 @@ abstract class FormField implements FormFieldContract
             $attributes['class'] = $class;
         }
 
-        return $this->render()
+        return $this
+            ->when(
+                !is_null($model),
+                fn (self $formField) => $formField->value($model->{$this->getName()})
+            )
+            ->render()
             ->withAttributes($attributes)
             ->render();
     }

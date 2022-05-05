@@ -19,8 +19,8 @@ class TextareaField extends FormField
     public function render(): FieldContract
     {
         return Textarea::make(
-            name: $this->getName(),
-            value: $this->castValue($this->value),
+            name: $this->getNameOrWireModel(),
+            value: $this->value,
             label: $this->label,
             rows: $this->rows,
             required: $this->required

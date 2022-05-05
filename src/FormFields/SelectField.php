@@ -27,8 +27,8 @@ class SelectField extends FormField
     public function render(): FieldContract
     {
         return Select::make(
-            name: $this->getName(),
-            value: $this->castValue($this->value),
+            name: $this->getNameOrWireModel(),
+            value: $this->value,
             options: $this->options,
             nullable: $this->nullable,
             label: $this->label,
