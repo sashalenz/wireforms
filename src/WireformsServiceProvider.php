@@ -26,7 +26,7 @@ class WireformsServiceProvider extends PackageServiceProvider
             Text::class,
             Textarea::class,
             Select::class,
-            Wireselect::class
+            Wireselect::class,
         ]);
 
         Livewire::component('wireforms.livewire.wire-select', \Sashalenz\Wireforms\Livewire\WireSelect::class);

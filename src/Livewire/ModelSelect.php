@@ -22,11 +22,11 @@ abstract class ModelSelect extends Component
 
     abstract public function showResults(): bool;
 
-    abstract public function getSelectedValueProperty():? string;
+    abstract public function getSelectedValueProperty(): ?string;
 
-    abstract public function getSelectedTitleProperty():? string;
+    abstract public function getSelectedTitleProperty(): ?string;
 
-    abstract public function getResultsProperty():? Collection;
+    abstract public function getResultsProperty(): ?Collection;
 
     abstract public function isCurrent(string $key): bool;
 

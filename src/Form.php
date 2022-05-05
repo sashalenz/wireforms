@@ -12,6 +12,7 @@ abstract class Form extends ModalComponent
     use HasChild;
 
     abstract protected function fields(): array;
+
     abstract protected function title(): string;
 
     public function beforeSave(): void
@@ -27,24 +28,24 @@ abstract class Form extends ModalComponent
     public function rules(): array
     {
         return collect($this->fields())
-            ->filter(fn(FormFieldContract $field) => $field->hasRules())
-            ->mapWithKeys(fn(FormFieldContract $field) => ["model.{$field->getName()}" => $field->getRules()])
+            ->filter(fn (FormFieldContract $field) => $field->hasRules())
+            ->mapWithKeys(fn (FormFieldContract $field) => ["model.{$field->getName()}" => $field->getRules()])
             ->toArray();
     }
 
     protected function defaults(): array
     {
         return collect($this->fields())
-            ->filter(fn(FormFieldContract $field) => !is_null($field->getDefault()))
-            ->mapWithKeys(fn(FormFieldContract $field) => [$field->getName() => $field->getDefault()])
+            ->filter(fn (FormFieldContract $field) => ! is_null($field->getDefault()))
+            ->mapWithKeys(fn (FormFieldContract $field) => [$field->getName() => $field->getDefault()])
             ->toArray();
     }
 
     public function updated(string $field, string $value): void
     {
         $rules = collect($this->rules())
-            ->filter(fn($value, $key) => $key === $field)
-            ->mapWithKeys(fn($rules, $key) => [
+            ->filter(fn ($value, $key) => $key === $field)
+            ->mapWithKeys(fn ($rules, $key) => [
                 $key => collect($rules)
                     ->diff(['required', 'confirmed'])
                     ->all(),
@@ -84,9 +85,8 @@ abstract class Form extends ModalComponent
             ]);
 
             $this->forceClose()->closeModalWithEvents([
-                '$refresh'
+                '$refresh',
             ]);
-
         } catch (\RuntimeException $exception) {
             $this->dispatchBrowserEvent('alert', [
                 'status' => 'error',
@@ -101,10 +101,10 @@ abstract class Form extends ModalComponent
         return view('wireforms::form', [
             'title' => collect([
                 $this->title(),
-                $this->model->getKey()
+                $this->model->getKey(),
             ])
                 ->filter()
-                ->implode(' №')
+                ->implode(' №'),
         ]);
     }
 }

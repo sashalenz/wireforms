@@ -14,5 +14,4 @@ trait Translatable
 
         return $this;
     }
-
 }

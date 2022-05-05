@@ -17,7 +17,6 @@ class Textarea extends Field
         ?string $locale = null,
         ?string $placeholder = null,
         ?string $help = null,
-
         public int $rows = 2
     ) {
         parent::__construct(
