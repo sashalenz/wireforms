@@ -2,26 +2,15 @@
 
 namespace Sashalenz\Wireforms\FormFields;
 
-use Illuminate\Contracts\View\View;
+use Sashalenz\Wireforms\Components\Fields\Text;
+use Sashalenz\Wireforms\Contracts\FieldContract;
+use Sashalenz\Wireforms\Traits\Translatable;
 
-class TextField extends Field
+class TextField extends FormField
 {
-    public ?string $icon = null;
+    use Translatable;
+
     public ?string $type = 'text';
-
-    public function __construct(string $name, ?string $title = null, $value = null, ?bool $required = false, ?string $placeholder = null, ?string $default = null, ?string $help = null, ?int $size = 6, ?string $type = 'text', ?string $icon = null)
-    {
-        $this->icon = $icon;
-        $this->type = $type;
-        parent::__construct($name, $title, $value, $required, $placeholder, $default, $help, $size);
-    }
-
-    public function icon(string $icon): self
-    {
-        $this->icon = $icon;
-
-        return $this;
-    }
 
     public function type(string $type): self
     {
@@ -30,8 +19,14 @@ class TextField extends Field
         return $this;
     }
 
-    public function render(): View
+    public function render(): FieldContract
     {
-        return view('wireforms::field.text-field');
+        return Text::make(
+            name: $this->getName(),
+            value: $this->castValue($this->value),
+            label: $this->label,
+            type: $this->type,
+            required: $this->required
+        );
     }
 }

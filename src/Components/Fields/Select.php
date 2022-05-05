@@ -36,6 +36,11 @@ class Select extends Field
         );
     }
 
+    public function isSelected(?string $value = null): bool
+    {
+        return $this->value === $value;
+    }
+
     public function render(): View
     {
         return view('wireforms::components.fields.select')->with($this->data());

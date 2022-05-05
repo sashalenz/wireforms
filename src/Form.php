@@ -3,7 +3,6 @@
 namespace Sashalenz\Wireforms;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
 use LivewireUI\Modal\ModalComponent;
 use Sashalenz\Wireforms\Contracts\FormFieldContract;
 use Sashalenz\Wireforms\Traits\HasChild;
@@ -12,39 +11,43 @@ abstract class Form extends ModalComponent
 {
     use HasChild;
 
-    public Model $model;
-    public ?string $submitButton = 'save';
-    protected string $title;
-
+    abstract protected function fields(): array;
     abstract protected function title(): string;
 
-    abstract protected function fields(): array;
+    public function beforeSave(): void
+    {
+//
+    }
+
+    public function afterSave(): void
+    {
+//
+    }
 
     public function rules(): array
     {
         return collect($this->fields())
-            ->filter(fn (FormFieldContract $field) => $field->hasRules())
-            ->mapWithKeys(fn (FormFieldContract $field) => ["model.{$field->getName()}" => $field->getRules()])
+            ->filter(fn(FormFieldContract $field) => $field->hasRules())
+            ->mapWithKeys(fn(FormFieldContract $field) => ["model.{$field->getName()}" => $field->getRules()])
             ->toArray();
     }
 
     protected function defaults(): array
     {
         return collect($this->fields())
-            ->filter(fn (Field $field) => ! is_null($field->getDefault()))
-            ->mapWithKeys(fn (Field $field) => [$field->getName() => $field->getDefault()])
+            ->filter(fn(FormFieldContract $field) => !is_null($field->getDefault()))
+            ->mapWithKeys(fn(FormFieldContract $field) => [$field->getName() => $field->getDefault()])
             ->toArray();
     }
 
-    public function updated(string $field): void
+    public function updated(string $field, string $value): void
     {
         $rules = collect($this->rules())
-            ->filter(fn ($value, $key) => $key === $field)
-            ->mapWithKeys(fn ($rules, $key) => [
+            ->filter(fn($value, $key) => $key === $field)
+            ->mapWithKeys(fn($rules, $key) => [
                 $key => collect($rules)
-                    ->reject(fn ($rule) => in_array($rule, ['required', 'confirmed']))
-                    ->values()
-                    ->toArray(),
+                    ->diff(['required', 'confirmed'])
+                    ->all(),
             ])
             ->toArray();
 
@@ -61,34 +64,33 @@ abstract class Form extends ModalComponent
     public function getFieldsProperty(): array
     {
         return collect($this->fields())
-            ->tap(fn (Field $field) => $field->wireModel("model.{$field->getName()}"))
+            ->each(fn (FormFieldContract $field) => $field->wireModel("model.{$field->getName()}"))
             ->toArray();
-    }
-
-    public function getTitleProperty(): string
-    {
-        return $this->title() ?? $this->title;
     }
 
     public function save(): void
     {
         try {
+            $this->beforeSave();
+
             $this->validate();
             $this->model->save();
 
+            $this->afterSave();
+
             $this->dispatchBrowserEvent('alert', [
                 'status' => 'success',
-                'message' => __('wireforms::successfully_saved'),
+                'message' => __('wireforms::forms.successfully_saved'),
             ]);
 
-            $this->forceClose()->closeModal();
-            $this->dispatchBrowserEvent('$refresh');
+            $this->forceClose()->closeModalWithEvents([
+                '$refresh'
+            ]);
 
-            $this->dispatchBrowserEvent('close-modal');
         } catch (\RuntimeException $exception) {
             $this->dispatchBrowserEvent('alert', [
                 'status' => 'error',
-                'message' => __('wireforms::unable_to_save'),
+                'message' => __('wireforms::form.unable_to_save'),
                 'description' => $exception->getMessage(),
             ]);
         }
@@ -96,6 +98,13 @@ abstract class Form extends ModalComponent
 
     public function render(): View
     {
-        return view('wireforms::form');
+        return view('wireforms::form', [
+            'title' => collect([
+                $this->title(),
+                $this->model->getKey()
+            ])
+                ->filter()
+                ->implode(' №')
+        ]);
     }
 }

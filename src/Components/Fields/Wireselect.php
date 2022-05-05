@@ -4,7 +4,7 @@ namespace Sashalenz\Wireforms\Components\Fields;
 
 use Illuminate\Contracts\View\View;
 
-class Text extends Field
+class Wireselect extends Field
 {
     public function __construct(
         string $name,
@@ -18,9 +18,10 @@ class Text extends Field
         ?string $placeholder = null,
         ?string $help = null,
 
-        public string $type = 'text',
-        public ?string $prepend = null,
-        public ?string $append = null
+        public ?string $model = null,
+        public bool $nullable = false,
+        public bool $searchable = false,
+        public string $orderDir = 'asc'
     ) {
         parent::__construct(
             $name,
@@ -38,7 +39,6 @@ class Text extends Field
 
     public function render(): View
     {
-        return view('wireforms::components.fields.text')
-            ->with($this->data());
+        return view('wireforms::components.fields.wireselect')->with($this->data());
     }
 }

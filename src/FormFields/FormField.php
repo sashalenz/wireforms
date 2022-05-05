@@ -5,29 +5,31 @@ namespace Sashalenz\Wireforms\FormFields;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\View\Component;
 use RuntimeException;
 use Sashalenz\Wireforms\Contracts\FormFieldContract;
+use Throwable;
 
-abstract class FormField extends Component implements FormFieldContract
+abstract class FormField implements FormFieldContract
 {
     protected $value = null;
     protected ?string $default = null;
 
     protected ?bool $required = false;
-    protected ?bool $isWireModel = false;
     protected ?string $placeholder = null;
     protected ?string $help = null;
 
     protected array $rules = [];
     protected array $classes = [];
+    protected int $size = 6;
 
     protected ?Closure $styleCallback = null;
     protected ?Closure $displayCondition = null;
 
+    private ?string $wireModel = null;
+
     public function __construct(
-        public string $name,
-        public ?string $label = null
+        protected string $name,
+        protected ?string $label = null
     ) {
     }
 
@@ -50,9 +52,9 @@ abstract class FormField extends Component implements FormFieldContract
         return $this;
     }
 
-    public function isWireModel(): self
+    public function wireModel(string $wireModel): self
     {
-        $this->isWireModel = true;
+        $this->wireModel = $wireModel;
 
         return $this;
     }
@@ -78,6 +80,13 @@ abstract class FormField extends Component implements FormFieldContract
         return $this;
     }
 
+    public function size(int $size): self
+    {
+        $this->size = ($size > 6 || $size < 1) ? 6 : $size;
+
+        return $this;
+    }
+
     public function rules(array $rules): self
     {
         $this->rules = $rules;
@@ -85,9 +94,12 @@ abstract class FormField extends Component implements FormFieldContract
         return $this;
     }
 
-    public function addClass(...$classes): self
+    public function class(string $classes): self
     {
-        $this->classes = array_merge($this->classes, $classes);
+        $this->classes = array_merge(
+            $this->classes,
+            explode(' ', $classes)
+        );
 
         return $this;
     }
@@ -106,21 +118,20 @@ abstract class FormField extends Component implements FormFieldContract
         return $this;
     }
 
-    protected function getClass(?Model $model = null): ?string
+    protected function getClass(?Model $model = null):? string
     {
-        $class = is_callable($this->styleCallback) && !is_null($model)
-            ? call_user_func($this->styleCallback, $model)
-            : null;
-
-        if (!is_string($class) && !is_null($class)) {
-            throw new RuntimeException('Return value must be a string');
-        }
-
-        $this->classes[] = $class;
-
         return collect($this->classes)
+            ->when(
+                is_callable($this->styleCallback) && !is_null($model),
+                fn ($class) => $class->push((string)call_user_func($this->styleCallback, $model))
+            )
+            ->when(
+                $this->size,
+                fn ($class) => $class->push('col-span-'.$this->size)
+            )
             ->filter()
             ->flatten()
+            ->unique()
             ->implode(' ');
     }
 
@@ -134,7 +145,22 @@ abstract class FormField extends Component implements FormFieldContract
         return $value;
     }
 
-    public function renderIt(?Model $model = null): ?View
+    public function getName(): string
+    {
+        return $this->wireModel ?? $this->name;
+    }
+
+    public function getDefault(): string
+    {
+        return $this->default;
+    }
+
+    public function getRules(): array
+    {
+        return $this->rules;
+    }
+
+    public function renderIt(?Model $model = null):? View
     {
         $condition = is_callable($this->displayCondition)
             ? call_user_func($this->displayCondition, $model)
@@ -144,9 +170,18 @@ abstract class FormField extends Component implements FormFieldContract
             return null;
         }
 
+        $attributes = [];
+
+        if ($this->wireModel) {
+            $attributes['wire:model.debounce.500ms'] = $this->wireModel;
+        }
+
+        if ($class = $this->getClass($model)) {
+            $attributes['class'] = $class;
+        }
+
         return $this->render()
-            ->withAttributes([
-                'class' => $this->getClass($model)
-            ]);
+            ->withAttributes($attributes)
+            ->render();
     }
 }

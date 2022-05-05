@@ -2,17 +2,12 @@
 
 namespace Sashalenz\Wireforms\FormFields;
 
-use Illuminate\Contracts\View\View;
+use Sashalenz\Wireforms\Components\Fields\Textarea;
+use Sashalenz\Wireforms\Contracts\FieldContract;
 
-class TextareaField extends Field
+class TextareaField extends FormField
 {
-    private int $rows;
-
-    public function __construct(string $name, ?string $title = null, $value = null, ?bool $required = false, ?string $placeholder = null, ?string $default = null, ?string $help = null, ?int $size = 6, ?int $rows = 3)
-    {
-        $this->rows = $rows;
-        parent::__construct($name, $title, $value, $required, $placeholder, $default, $help, $size);
-    }
+    private ?int $rows = 2;
 
     public function rows(int $rows): self
     {
@@ -21,13 +16,14 @@ class TextareaField extends Field
         return $this;
     }
 
-    public function getRows(): int
+    public function render(): FieldContract
     {
-        return $this->rows;
-    }
-
-    public function render(): View
-    {
-        return view('wireforms::field.textarea-field');
+        return Textarea::make(
+            name: $this->getName(),
+            value: $this->castValue($this->value),
+            label: $this->label,
+            rows: $this->rows,
+            required: $this->required
+        );
     }
 }

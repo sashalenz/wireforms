@@ -2,8 +2,8 @@
 
 namespace Sashalenz\Wireforms\FormFields;
 
-use Illuminate\Contracts\View\View;
 use Sashalenz\Wireforms\Components\Fields\Select;
+use Sashalenz\Wireforms\Contracts\FieldContract;
 
 class SelectField extends FormField
 {
@@ -24,14 +24,15 @@ class SelectField extends FormField
         return $this;
     }
 
-    public function render(): View
+    public function render(): FieldContract
     {
         return Select::make(
-            name: $this->name,
+            name: $this->getName(),
             value: $this->castValue($this->value),
+            options: $this->options,
+            nullable: $this->nullable,
             label: $this->label,
-            required: $this->required,
-
+            required: $this->required
         );
     }
 }
