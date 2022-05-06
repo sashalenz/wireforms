@@ -14,7 +14,7 @@ trait HasChild
     public function updatedChild($key, $value): void
     {
         $this->fill([
-            $key => $value
+            $key => $value,
         ]);
     }
 }

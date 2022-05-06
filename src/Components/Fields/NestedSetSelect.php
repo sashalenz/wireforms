@@ -17,7 +17,6 @@ class NestedSetSelect extends Field
         ?string $locale = null,
         ?string $placeholder = null,
         ?string $help = null,
-
         public ?string $model = null,
         public ?string $createNewModel = null,
         public ?string $createNewField = null,
