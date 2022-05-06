@@ -55,7 +55,7 @@ abstract class Form extends ModalComponent
             ->filter(fn ($value, $key) => $key === $field)
             ->mapWithKeys(fn ($rules, $key) => [
                 $key => collect($rules)
-                    ->diff(['required', 'confirmed'])
+                    ->reject(fn ($rule) => in_array($rule, ['required', 'confirmed']))
                     ->all(),
             ])
             ->toArray();
@@ -94,7 +94,7 @@ abstract class Form extends ModalComponent
 
             $this->dispatchBrowserEvent('alert', [
                 'status' => 'success',
-                'message' => __('wireforms::forms.successfully_saved'),
+                'message' => __('wireforms::form.successfully_saved'),
             ]);
 
             if ($this->parentModal) {

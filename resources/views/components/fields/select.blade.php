@@ -31,7 +31,7 @@
                 {{ $attributes->whereStartsWith(['data-', 'wire:model', 'wire:change']) }}
         >
             @if($nullable)
-                <option value="">{{ $placeholder ?? __('wireforms::forms.please_select') }}</option>
+                <option value="">{{ $placeholder ?? __('wireforms::form.please_select') }}</option>
             @endif
             @foreach($options as $key => $option)
                 <option value="{{ $key }}" @selected($isSelected($key))>{{ $option }}</option>

@@ -8,7 +8,7 @@ class Select extends Field
 {
     public function __construct(
         string $name,
-        ?string $value = null,
+        $value,
         bool $required = false,
         bool $disabled = false,
         bool $readonly = false,
@@ -35,7 +35,7 @@ class Select extends Field
         );
     }
 
-    public function isSelected(?string $value = null): bool
+    public function isSelected(mixed $value): bool
     {
         return $this->value === $value;
     }

@@ -8,7 +8,7 @@ class Textarea extends Field
 {
     public function __construct(
         string $name,
-        ?string $value = null,
+        $value,
         bool $required = false,
         bool $disabled = false,
         bool $readonly = false,
