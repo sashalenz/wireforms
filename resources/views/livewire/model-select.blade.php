@@ -10,8 +10,8 @@
                 :aria-expanded="open ? 'true' : 'false'"
                 aria-labelledby="listbox-label"
                 x-on:click.prevent="open = (readonly) ? false : !open"
-                class="relative w-full border pl-3 pr-10 py-1.5 text-left focus:outline-none cursor-pointer transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-                :class="{'bg-gray-100': readonly, 'bg-white': !readonly, 'border-primary-500 border-b-white': open, 'border-gray-200 focus:border-primary-300': !open }"
+                class="relative w-full border pl-3 pr-10 py-1.5 text-left cursor-pointer transition ease-in-out duration-150 sm:text-sm sm:leading-5 focus:outline-none focus:shadow-full focus:shadow-primary-100/50"
+                :class="{'bg-gray-100': readonly, 'bg-white': !readonly, 'border-primary-300 border-b-white': open, 'border-gray-200 focus:border-primary-300': !open }"
         >
             @if($this->selectedValue)
                 <span class="block truncate text-gray-700">{{ $this->selectedTitle }}</span>
@@ -30,7 +30,7 @@
             @endif
         </button>
         @if($isOpen)
-            <div class="absolute w-full bg-white border border-primary border-t-0 -mt-px z-20"
+            <div class="absolute w-full bg-white border border-primary-300 border-t-0 -mt-px z-20"
                  x-show="!readonly"
                  x-effect="searchable === true && $refs.search.focus()"
                  x-on:click.away="open = false"
@@ -78,11 +78,24 @@
                                 @endif
                             </li>
                         @empty
-                            <li id="listbox-option-null" role="option" class="group text-gray-500 cursor-default select-none relative py-2 pl-3 pr-9">
+                            @if($createNewModel)
+                                <li id="listbox-option-new"
+                                    role="option"
+                                    class="group text-gray-900 focus:text-white focus:bg-primary-600 hover:text-white hover:bg-primary-600 cursor-pointer select-none relative py-2 pl-3 pr-9"
+                                    wire:key="listbox-option-new"
+                                    wire:click.prevent="$emit('openModal', '{{ $createNewModel }}', {{ $this->createNewParams }})"
+                                >
+                                    <span class="block truncate">
+                                        @lang('admin.create_new')
+                                    </span>
+                                </li>
+                            @else
+                                <li id="listbox-option-null" role="option" class="group text-gray-500 cursor-default select-none relative py-2 pl-3 pr-9">
                                 <span class="font-normal block truncate">
                                     @lang('admin.not_found')
                                 </span>
-                            </li>
+                                </li>
+                            @endif
                         @endforelse
                     </ul>
                 @elseif($this->minInputLength)

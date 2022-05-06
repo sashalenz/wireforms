@@ -15,6 +15,8 @@ class WireSelect extends ModelSelect
         string $name,
         string $model,
         string $placeholder = null,
+        string $createNewModel = null,
+        string $createNewField = null,
         string $value = null,
         bool $required = false,
         bool $readonly = false,
@@ -26,6 +28,8 @@ class WireSelect extends ModelSelect
         $this->placeholder = $placeholder;
         $this->value = $value;
         $this->model = $model;
+        $this->createNewModel = $createNewModel;
+        $this->createNewField = $createNewField;
         $this->readonly = $readonly;
         $this->orderDir = $orderDir;
         $this->searchable = $searchable;

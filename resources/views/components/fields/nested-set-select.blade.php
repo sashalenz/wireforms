@@ -9,8 +9,10 @@
 >
     <div class="flex items-center">
         <livewire:wireforms.livewire.nested-set-select
-            :name="$attributes->thatStartWith('wire:model')->first() ?? $name"
+            :name="$id"
             :model="$model"
+            :create-new-model="$createNewModel"
+            :create-new-field="$createNewField"
             :required="$required"
             :placeholder="$placeholder"
             :readonly="$readonly"

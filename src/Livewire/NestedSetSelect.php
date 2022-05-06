@@ -16,10 +16,11 @@ class NestedSetSelect extends ModelSelect
         string $name,
         string $model,
         string $placeholder = null,
+        string $createNewModel = null,
+        string $createNewField = null,
         string $value = null,
         bool $required = false,
         bool $readonly = false,
-        bool $optgroup = false,
         string $orderDir = 'asc',
         bool $searchable = true
     ): void {
@@ -28,8 +29,9 @@ class NestedSetSelect extends ModelSelect
         $this->placeholder = $placeholder;
         $this->value = $value;
         $this->model = $model;
+        $this->createNewModel = $createNewModel;
+        $this->createNewField = $createNewField;
         $this->readonly = $readonly;
-        $this->optgroup = $optgroup;
         $this->orderDir = $orderDir;
         $this->searchable = $searchable;
     }

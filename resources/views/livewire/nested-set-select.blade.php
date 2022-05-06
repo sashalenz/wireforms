@@ -89,11 +89,24 @@
                                 </li>
                             @endforeach
                         @empty
-                            <li id="listbox-option-null" role="option" class="group text-gray-500 cursor-default select-none relative py-2 pl-3 pr-9">
+                            @if($createNewModel)
+                                <li id="listbox-option-new"
+                                    role="option"
+                                    class="group text-gray-900 focus:text-white focus:bg-primary-600 hover:text-white hover:bg-primary-600 cursor-pointer select-none relative py-2 pl-3 pr-9"
+                                    wire:key="listbox-option-new"
+                                    wire:click.prevent="$emit('openModal', '{{ $createNewModel }}', {{ $this->createNewParams }})"
+                                >
+                                    <span class="block truncate">
+                                        @lang('admin.create_new')
+                                    </span>
+                                </li>
+                            @else
+                                <li id="listbox-option-null" role="option" class="group text-gray-500 cursor-default select-none relative py-2 pl-3 pr-9">
                                 <span class="font-normal block truncate">
                                     @lang('admin.not_found')
                                 </span>
-                            </li>
+                                </li>
+                            @endif
                         @endforelse
                     </ul>
                 @elseif($this->minInputLength)

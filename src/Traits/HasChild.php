@@ -13,6 +13,8 @@ trait HasChild
 
     public function updatedChild($key, $value): void
     {
-        $this->fill([$key => $value]);
+        $this->fill([
+            $key => $value
+        ]);
     }
 }

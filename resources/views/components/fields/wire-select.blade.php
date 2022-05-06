@@ -11,6 +11,8 @@
         <livewire:wireforms.livewire.wire-select
             :name="$id"
             :model="$model"
+            :create-new-model="$createNewModel"
+            :create-new-field="$createNewField"
             :required="$required"
             :placeholder="$placeholder"
             :readonly="$readonly"

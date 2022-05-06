@@ -5,12 +5,15 @@ namespace Sashalenz\Wireforms;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use LivewireUI\Modal\ModalComponent;
+use RuntimeException;
 use Sashalenz\Wireforms\Contracts\FormFieldContract;
 use Sashalenz\Wireforms\Traits\HasChild;
 
 abstract class Form extends ModalComponent
 {
     use HasChild;
+    public array $fillFields = [];
+    public bool $parentModal = false;
 
     abstract protected function fields(): Collection;
 
@@ -69,6 +72,10 @@ abstract class Form extends ModalComponent
 
     public function getFieldsProperty(): Collection
     {
+        if (count($this->fillFields)) {
+            $this->model->fill($this->fillFields);
+        }
+
         return $this->fields()
             ->each(
                 fn (FormFieldContract $field) => $field->wireModel("model.{$field->getName()}")
@@ -90,10 +97,19 @@ abstract class Form extends ModalComponent
                 'message' => __('wireforms::forms.successfully_saved'),
             ]);
 
-            $this->forceClose()->closeModalWithEvents([
-                '$refresh',
-            ]);
-        } catch (\RuntimeException $exception) {
+            if ($this->parentModal) {
+                $this->closeModalWithEvents([
+                    $this->parentModal => [
+                        'fillParent', [$this->model->getKey()]
+                    ]
+                ]);
+            } else {
+                $this->closeModalWithEvents([
+                    '$refresh',
+                ]);
+            }
+
+        } catch (RuntimeException $exception) {
             $this->dispatchBrowserEvent('alert', [
                 'status' => 'error',
                 'message' => __('wireforms::form.unable_to_save'),

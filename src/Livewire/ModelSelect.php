@@ -19,6 +19,17 @@ abstract class ModelSelect extends Component
     public int $limit = 20;
     public string $orderDir = 'asc';
     public ?int $minInputLength = null;
+    public ?string $createNewModel = null;
+    public ?string $createNewField = null;
+
+    protected $listeners = [
+        'fillParent',
+    ];
+
+    public function fillParent($value): void
+    {
+        $this->setSelected($value);
+    }
 
     abstract public function showResults(): bool;
 
@@ -29,6 +40,18 @@ abstract class ModelSelect extends Component
     abstract public function getResultsProperty(): ?Collection;
 
     abstract public function isCurrent(string $key): bool;
+
+    public function getCreateNewParamsProperty(): string
+    {
+        return collect()
+            ->when(
+                $this->createNewField && $this->search,
+                fn ($collection) => $collection
+                    ->put('fillFields', [$this->createNewField => $this->search])
+                    ->put('parentModal', $this->id)
+            )
+            ->toJson();
+    }
 
     public function render(): View
     {
