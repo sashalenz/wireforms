@@ -100,15 +100,14 @@ abstract class Form extends ModalComponent
             if ($this->parentModal) {
                 $this->closeModalWithEvents([
                     $this->parentModal => [
-                        'fillParent', [$this->model->getKey()]
-                    ]
+                        'fillParent', [$this->model->getKey()],
+                    ],
                 ]);
             } else {
                 $this->closeModalWithEvents([
                     '$refresh',
                 ]);
             }
-
         } catch (RuntimeException $exception) {
             $this->dispatchBrowserEvent('alert', [
                 'status' => 'error',

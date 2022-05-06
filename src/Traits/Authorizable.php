@@ -20,5 +20,4 @@ trait Authorizable
             return false;
         }
     }
-
 }
