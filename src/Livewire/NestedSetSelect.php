@@ -131,9 +131,9 @@ class NestedSetSelect extends ModelSelect
                 $item->getKey() => [
                     'name' => $item->getDisplayName(),
                     'children' => $item->sortedChildren->mapWithKeys(fn ($child) => [
-                        $child->getKey() => $child->getDisplayName()
-                    ])
-                ]
+                        $child->getKey() => $child->getDisplayName(),
+                    ]),
+                ],
             ]);
     }
 

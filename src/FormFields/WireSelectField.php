@@ -42,6 +42,7 @@ class WireSelectField extends FormField
 
         return $this;
     }
+
     public function orderDir(string $orderDir): self
     {
         $this->orderDir = $orderDir;

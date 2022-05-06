@@ -192,7 +192,7 @@ abstract class FormField implements FormFieldContract
 
         return $this
             ->when(
-                !is_null($model),
+                ! is_null($model),
                 fn (self $formField) => $formField->value($model->{$this->getName()})
             )
             ->render()

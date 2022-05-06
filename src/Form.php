@@ -13,6 +13,7 @@ abstract class Form extends ModalComponent
     use HasChild;
 
     abstract protected function fields(): Collection;
+
     abstract protected function title(): string;
 
     public function beforeSave(): void
@@ -28,9 +29,9 @@ abstract class Form extends ModalComponent
     public function rules(): array
     {
         return $this->fields
-            ->filter(fn(FormFieldContract $field) => $field->hasRules())
-            ->mapWithKeys(fn(FormFieldContract $field) => [
-                $field->getNameOrWireModel() => $field->getRules()
+            ->filter(fn (FormFieldContract $field) => $field->hasRules())
+            ->mapWithKeys(fn (FormFieldContract $field) => [
+                $field->getNameOrWireModel() => $field->getRules(),
             ])
             ->toArray();
     }
@@ -38,9 +39,9 @@ abstract class Form extends ModalComponent
     protected function defaults(): array
     {
         return $this->fields
-            ->filter(fn(FormFieldContract $field) => !is_null($field->getDefault()))
-            ->mapWithKeys(fn(FormFieldContract $field) => [
-                $field->getName() => $field->getDefault()
+            ->filter(fn (FormFieldContract $field) => ! is_null($field->getDefault()))
+            ->mapWithKeys(fn (FormFieldContract $field) => [
+                $field->getName() => $field->getDefault(),
             ])
             ->toArray();
     }
