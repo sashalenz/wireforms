@@ -1,11 +1,13 @@
-<x-wiretable-layout-field :name="$name"
-                          :wire-model="$wireModel"
-                          :title="$title"
-                          :size="$size"
-                          :help="$help"
-                          :required="$required"
-                          :required-icon="$requiredIcon"
-                          class="{{ $attributes->whereStartsWith('class')->first() }}"
+<x-wireforms::fields
+    :name="$name"
+    :wire-model="$wireModel"
+    :title="$title"
+    :size="$size"
+    :help="$help"
+    :required="$required"
+    :required-icon="$requiredIcon"
+    class="{{ $attributes->whereStartsWith('class')->first() }}"
+    xmlns:x-wireforms="http://www.w3.org/1999/html"
 >
     <div class="relative rounded-md shadow-sm"
          x-data="{ value: @entangle($attributes->wire('model')) }"
@@ -35,4 +37,4 @@
         </div>
         @enderror
     </div>
-</x-wiretable-layout-field>
+</x-wireforms::fields>
