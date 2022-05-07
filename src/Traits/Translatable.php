@@ -21,16 +21,16 @@ trait Translatable
 
     public function getRules(): array
     {
-        if (!$this->translatable) {
+        if (! $this->translatable) {
             return [
-                $this->getNameOrWireModel() => $this->formatRules()
+                $this->getNameOrWireModel() => $this->formatRules(),
             ];
         }
 
         return collect($this->translatableLocales)
             ->mapWithKeys(
                 fn (string $locale) => [
-                    sprintf('%s.%s', $this->getNameOrWireModel(), $locale) => $this->formatRules()
+                    sprintf('%s.%s', $this->getNameOrWireModel(), $locale) => $this->formatRules(),
                 ]
             )
             ->all();
@@ -38,7 +38,7 @@ trait Translatable
 
     public function renderField(?Model $model = null): Collection
     {
-        if (!$this->translatable) {
+        if (! $this->translatable) {
             return collect([
                 $this
                     ->when(
@@ -47,7 +47,7 @@ trait Translatable
                             data_get($model?->toArray(), $field->getName())
                         )
                     )
-                    ->render()
+                    ->render(),
             ]);
         }
 

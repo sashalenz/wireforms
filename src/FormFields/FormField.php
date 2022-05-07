@@ -173,7 +173,7 @@ abstract class FormField implements FormFieldContract
     public function getRules(): array
     {
         return [
-            $this->getNameOrWireModel() => $this->formatRules()
+            $this->getNameOrWireModel() => $this->formatRules(),
         ];
     }
 
@@ -197,11 +197,11 @@ abstract class FormField implements FormFieldContract
                         data_get($model?->toArray(), $field->getName())
                     )
                 )
-                ->render()
+                ->render(),
         ]);
     }
 
-    public function renderIt(?Model $model = null):? array
+    public function renderIt(?Model $model = null): ?array
     {
         $condition = is_callable($this->displayCondition)
             ? call_user_func($this->displayCondition, $model)
@@ -218,7 +218,7 @@ abstract class FormField implements FormFieldContract
                 fn (FieldContract $field) => $field
                     ->withAttributes([
                         'class' => $class,
-                        'wire:model.debounce.500ms' => $field->name
+                        'wire:model.debounce.500ms' => $field->name,
                     ])
                     ->render()
             )
