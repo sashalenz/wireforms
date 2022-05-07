@@ -14,7 +14,6 @@ class WireSelect extends Field
         bool $readonly = false,
         bool $showLabel = true,
         ?string $label = null,
-        ?string $locale = null,
         ?string $placeholder = null,
         ?string $help = null,
         public ?string $model = null,
@@ -32,7 +31,6 @@ class WireSelect extends Field
             $readonly,
             $showLabel,
             $label,
-            $locale,
             $placeholder,
             $help
         );

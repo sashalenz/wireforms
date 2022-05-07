@@ -2,12 +2,12 @@
 
 namespace Sashalenz\Wireforms\FormFields;
 
-use Illuminate\Contracts\View\View;
+use Sashalenz\Wireforms\Contracts\FieldContract;
 
-class DateTimeField extends Field
+class DateTimeField extends FormField
 {
-    public function render(): View
+    protected function render(): FieldContract
     {
-        return view('wireforms::field.date-time-field');
+        return;
     }
 }

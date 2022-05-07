@@ -3,7 +3,6 @@
     :id="$id"
     :required="$required"
     :label="$label"
-    :locale="$locale"
     :show-label="$showLabel"
     :help="$help"
     {{ $attributes->whereDoesntStartWith(['min', 'max', 'step', 'data', 'x-', 'wire:model', 'wire:change']) }}
@@ -13,11 +12,7 @@
             {{ $prepend }}
         @endisset
         <input type="{{ $type }}"
-               @if($locale)
-                   name="{{ $name }}[{{ $locale }}]"
-               @else
-                   name="{{ $name }}"
-               @endif
+               name="{{ $name }}"
                id="{{ $id }}"
                @if(!is_null($value))
                    value="{{ $value }}"

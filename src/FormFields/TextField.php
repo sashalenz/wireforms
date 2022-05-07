@@ -19,7 +19,7 @@ class TextField extends FormField
         return $this;
     }
 
-    public function render(): FieldContract
+    protected function render(): FieldContract
     {
         return Text::make(
             name: $this->getNameOrWireModel(),

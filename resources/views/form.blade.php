@@ -7,8 +7,8 @@
     </div>
     <div class="relative p-3">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-6">
-            @foreach($this->fields as $field)
-                {!! $field->renderIt($model) !!}
+            @foreach($fields as $field)
+                {!! $field !!}
             @endforeach
         </div>
     </div>

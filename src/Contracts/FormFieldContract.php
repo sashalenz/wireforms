@@ -2,8 +2,8 @@
 
 namespace Sashalenz\Wireforms\Contracts;
 
-use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 interface FormFieldContract
 {
@@ -11,11 +11,13 @@ interface FormFieldContract
 
     public function getNameOrWireModel(): string;
 
-    public function getDefault(): string;
+    public function getDefault():? string;
 
     public function getRules(): array;
 
     public function wireModel(string $wireModel): self;
 
-    public function renderIt(?Model $model = null): ?View;
+    public function renderField(?Model $model = null): Collection;
+
+    public function renderIt(?Model $model = null):? array;
 }

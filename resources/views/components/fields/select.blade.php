@@ -3,7 +3,6 @@
     :id="$id"
     :required="$required"
     :label="$label"
-    :locale="$locale"
     :show-label="$showLabel"
     :help="$help"
     {{ $attributes->whereDoesntStartWith(['data-', 'x-', 'wire:model', 'wire:change']) }}

@@ -16,7 +16,7 @@ class TextareaField extends FormField
         return $this;
     }
 
-    public function render(): FieldContract
+    protected function render(): FieldContract
     {
         return Textarea::make(
             name: $this->getNameOrWireModel(),

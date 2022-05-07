@@ -24,7 +24,7 @@ class SelectField extends FormField
         return $this;
     }
 
-    public function render(): FieldContract
+    protected function render(): FieldContract
     {
         return Select::make(
             name: $this->getNameOrWireModel(),

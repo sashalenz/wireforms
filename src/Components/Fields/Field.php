@@ -3,11 +3,14 @@
 namespace Sashalenz\Wireforms\Components\Fields;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Traits\Tappable;
 use Illuminate\View\Component;
 use Sashalenz\Wireforms\Contracts\FieldContract;
 
 abstract class Field extends Component implements FieldContract
 {
+    use Tappable;
+
     public string $id;
 
     public function __construct(
@@ -18,7 +21,6 @@ abstract class Field extends Component implements FieldContract
         public bool $readonly = false,
         public bool $showLabel = true,
         public ?string $label = null,
-        public ?string $locale = null,
         public ?string $placeholder = null,
         public ?string $help = null
     ) {
@@ -31,7 +33,7 @@ abstract class Field extends Component implements FieldContract
             return $attribute->first();
         }
 
-        return collect([$this->name, $this->locale])->filter()->implode('.');
+        return $this->name;
     }
 
     public static function make(...$attributes): static

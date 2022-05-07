@@ -3,9 +3,10 @@
 namespace Sashalenz\Wireforms\FormFields;
 
 use Closure;
-use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Conditionable;
+use Sashalenz\Wireforms\Contracts\FieldContract;
 use Sashalenz\Wireforms\Contracts\FormFieldContract;
 
 abstract class FormField implements FormFieldContract
@@ -26,7 +27,7 @@ abstract class FormField implements FormFieldContract
     protected ?Closure $styleCallback = null;
     protected ?Closure $displayCondition = null;
 
-    private ?string $wireModel = null;
+    public ?string $wireModel = null;
 
     public function __construct(
         protected string $name,
@@ -37,6 +38,13 @@ abstract class FormField implements FormFieldContract
     public static function make(string $name, ?string $label): static
     {
         return new static($name, $label);
+    }
+
+    public function label(string $label): self
+    {
+        $this->label = $label;
+
+        return $this;
     }
 
     public function value($value): self
@@ -164,13 +172,36 @@ abstract class FormField implements FormFieldContract
 
     public function getRules(): array
     {
+        return [
+            $this->getNameOrWireModel() => $this->formatRules()
+        ];
+    }
+
+    protected function formatRules(): array
+    {
         return collect($this->rules)
             ->flatten()
             ->unique()
             ->all();
     }
 
-    public function renderIt(?Model $model = null): ?View
+    abstract protected function render(): FieldContract;
+
+    public function renderField(?Model $model = null): Collection
+    {
+        return collect([
+            $this
+                ->when(
+                    $model,
+                    fn (FormFieldContract $field) => $field->value(
+                        data_get($model?->toArray(), $field->getName())
+                    )
+                )
+                ->render()
+        ]);
+    }
+
+    public function renderIt(?Model $model = null):? array
     {
         $condition = is_callable($this->displayCondition)
             ? call_user_func($this->displayCondition, $model)
@@ -180,23 +211,17 @@ abstract class FormField implements FormFieldContract
             return null;
         }
 
-        $attributes = [];
+        $class = $this->getClass($model);
 
-        if ($this->wireModel) {
-            $attributes['wire:model.debounce.500ms'] = $this->wireModel;
-        }
-
-        if ($class = $this->getClass($model)) {
-            $attributes['class'] = $class;
-        }
-
-        return $this
-            ->when(
-                ! is_null($model),
-                fn (self $formField) => $formField->value($model->{$this->getName()})
+        return $this->renderField($model)
+            ->map(
+                fn (FieldContract $field) => $field
+                    ->withAttributes([
+                        'class' => $class,
+                        'wire:model.debounce.500ms' => $field->name
+                    ])
+                    ->render()
             )
-            ->render()
-            ->withAttributes($attributes)
-            ->render();
+            ->toArray();
     }
 }

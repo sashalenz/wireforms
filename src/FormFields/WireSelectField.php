@@ -68,7 +68,7 @@ class WireSelectField extends FormField
         return $this;
     }
 
-    public function render(): FieldContract
+    protected function render(): FieldContract
     {
         if ($this->nestedSet) {
             return NestedSetSelect::make(

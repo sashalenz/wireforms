@@ -4,7 +4,6 @@
     'label',
     'required' => false,
     'showLabel' => true,
-    'locale' => null,
     'help' => null
 ])
 
@@ -12,7 +11,6 @@
     @if($showLabel)
         <label for="{{ $id }}" @class(['block text-sm text-gray-600', 'font-semibold' => $required])>
             {{ $label }}
-            @if($locale)({{ $locale }})@endif
             @if($required) <span class="text-red-400">*</span> @endif
         </label>
     @endif

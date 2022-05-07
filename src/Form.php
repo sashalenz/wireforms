@@ -33,9 +33,7 @@ abstract class Form extends ModalComponent
     {
         return $this->fields
             ->filter(fn (FormFieldContract $field) => $field->hasRules())
-            ->mapWithKeys(fn (FormFieldContract $field) => [
-                $field->getNameOrWireModel() => $field->getRules(),
-            ])
+            ->mapWithKeys(fn (FormFieldContract $field) => $field->getRules())
             ->toArray();
     }
 
@@ -77,6 +75,9 @@ abstract class Form extends ModalComponent
         }
 
         return $this->fields()
+            ->filter(
+                fn ($field) => $field instanceof FormFieldContract
+            )
             ->each(
                 fn (FormFieldContract $field) => $field->wireModel("model.{$field->getName()}")
             );
@@ -120,6 +121,9 @@ abstract class Form extends ModalComponent
     public function render(): View
     {
         return view('wireforms::form', [
+            'fields' => $this->fields
+                ->map(fn ($field) => $field->renderIt($this->model))
+                ->flatten(),
             'title' => collect([
                 $this->title(),
                 $this->model->getKey(),

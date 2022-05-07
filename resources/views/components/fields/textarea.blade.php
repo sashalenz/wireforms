@@ -3,17 +3,12 @@
     :id="$id"
     :required="$required"
     :label="$label"
-    :locale="$locale"
     :show-label="$showLabel"
     :help="$help"
     {{ $attributes->whereDoesntStartWith(['data', 'x-', 'wire:model', 'wire:change']) }}
 >
     <textarea
-        @if($locale)
-            name="{{ $name }}[{{ $locale }}]"
-        @else
-            name="{{ $name }}"
-        @endif
+        name="{{ $name }}"
         id="{{ $id }}"
         rows="{{ $rows }}"
         @if($placeholder)

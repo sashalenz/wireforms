@@ -14,7 +14,6 @@ class Select extends Field
         bool $readonly = false,
         bool $showLabel = true,
         ?string $label = null,
-        ?string $locale = null,
         ?string $placeholder = null,
         ?string $help = null,
         public array $options = [],
@@ -29,7 +28,6 @@ class Select extends Field
             $readonly,
             $showLabel,
             $label,
-            $locale,
             $placeholder,
             $help
         );
