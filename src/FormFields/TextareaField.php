@@ -4,9 +4,12 @@ namespace Sashalenz\Wireforms\FormFields;
 
 use Sashalenz\Wireforms\Components\Fields\Textarea;
 use Sashalenz\Wireforms\Contracts\FieldContract;
+use Sashalenz\Wireforms\Traits\Translatable;
 
 class TextareaField extends FormField
 {
+    use Translatable;
+
     private ?int $rows = 2;
 
     public function rows(int $rows): self
