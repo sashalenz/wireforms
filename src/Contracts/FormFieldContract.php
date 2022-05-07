@@ -11,7 +11,7 @@ interface FormFieldContract
 
     public function getNameOrWireModel(): string;
 
-    public function getDefault():? string;
+    public function getDefault(): ?string;
 
     public function getRules(): array;
 
@@ -19,5 +19,5 @@ interface FormFieldContract
 
     public function renderField(?Model $model = null): Collection;
 
-    public function renderIt(?Model $model = null):? array;
+    public function renderIt(?Model $model = null): ?array;
 }
