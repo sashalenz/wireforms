@@ -19,6 +19,14 @@ class TextField extends FormField
         return $this;
     }
 
+    public function number(): self
+    {
+        $this->type = 'number';
+        $this->rules[] = 'numeric';
+
+        return $this;
+    }
+
     protected function render(): FieldContract
     {
         return Text::make(

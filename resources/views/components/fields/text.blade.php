@@ -14,9 +14,9 @@
         <input type="{{ $type }}"
                name="{{ $name }}"
                id="{{ $id }}"
-               @if(!is_null($value))
+               @isset($value)
                    value="{{ $value }}"
-               @endif
+               @endisset
                @if($placeholder)
                    placeholder="{{ $placeholder }}"
                @endif

@@ -22,6 +22,7 @@ abstract class FormField implements FormFieldContract
 
     protected array $rules = [];
     protected array $classes = [];
+    protected array $attributes = [];
     protected int $size = 6;
 
     protected ?Closure $styleCallback = null;
@@ -99,7 +100,14 @@ abstract class FormField implements FormFieldContract
 
     public function rules(array $rules): self
     {
-        $this->rules = $rules;
+        $this->rules = array_merge($this->rules, $rules);
+
+        return $this;
+    }
+
+    public function attributes(array $attributes): self
+    {
+        $this->attributes = array_merge($this->attributes, $attributes);
 
         return $this;
     }
@@ -150,7 +158,27 @@ abstract class FormField implements FormFieldContract
         return count($this->rules);
     }
 
+    public function getRules(): array
+    {
+        return [
+            $this->getNameOrWireModel() => $this->formatRules(),
+        ];
+    }
+
+    protected function formatRules(): array
+    {
+        return collect($this->rules)
+            ->flatten()
+            ->unique()
+            ->all();
+    }
+
     public function castValue($value)
+    {
+        return $value;
+    }
+
+    public function beforeValidate($value)
     {
         return $value;
     }
@@ -168,21 +196,6 @@ abstract class FormField implements FormFieldContract
     public function getDefault(): string
     {
         return $this->default;
-    }
-
-    public function getRules(): array
-    {
-        return [
-            $this->getNameOrWireModel() => $this->formatRules(),
-        ];
-    }
-
-    protected function formatRules(): array
-    {
-        return collect($this->rules)
-            ->flatten()
-            ->unique()
-            ->all();
     }
 
     abstract protected function render(): FieldContract;
@@ -216,7 +229,7 @@ abstract class FormField implements FormFieldContract
         return $this->renderField($model)
             ->map(
                 fn (FieldContract $field) => $field
-                    ->withAttributes([
+                    ->withAttributes($this->attributes + [
                         'class' => $class,
                         'wire:model.debounce.500ms' => $field->name,
                     ])

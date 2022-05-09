@@ -46,7 +46,7 @@ class WireSelect extends ModelSelect
 
         $this->value = $value;
 
-        $this->emitUp('updatedChild', $this->name, $this->value);
+        $this->emitUp($this->emitUp, $this->name, $this->value);
     }
 
     public function showResults(): bool

@@ -21,6 +21,7 @@ abstract class ModelSelect extends Component
     public ?int $minInputLength = null;
     public ?string $createNewModel = null;
     public ?string $createNewField = null;
+    public string $emitUp = 'updatedChild';
 
     protected $listeners = [
         'fillParent',

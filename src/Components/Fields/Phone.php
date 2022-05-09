@@ -4,11 +4,11 @@ namespace Sashalenz\Wireforms\Components\Fields;
 
 use Illuminate\Contracts\View\View;
 
-class NestedSetSelect extends WireSelect
+class Phone extends Field
 {
     public function render(): View
     {
-        return view('wireforms::components.fields.nested-set-select')
+        return view('wireforms::components.fields.phone')
             ->with($this->data());
     }
 }

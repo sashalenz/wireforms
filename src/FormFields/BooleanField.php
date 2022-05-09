@@ -2,17 +2,26 @@
 
 namespace Sashalenz\Wireforms\FormFields;
 
-use Illuminate\Contracts\View\View;
+use Sashalenz\Wireforms\Components\Fields\Boolean;
+use Sashalenz\Wireforms\Contracts\FieldContract;
 
-class BooleanField extends Field
+class BooleanField extends FormField
 {
+    protected array $rules = [
+        'boolean'
+    ];
+
     public function castValue($value): bool
     {
-        return (bool) $value;
+        return (bool)$value;
     }
 
-    public function render(): View
+    public function render(): FieldContract
     {
-        return view('wireforms::field.boolean-field');
+        return Boolean::make(
+            name: $this->getNameOrWireModel(),
+            value: $this->value,
+            label: $this->label
+        );
     }
 }

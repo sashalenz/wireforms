@@ -4,11 +4,11 @@ namespace Sashalenz\Wireforms\Components\Fields;
 
 use Illuminate\Contracts\View\View;
 
-class WireSelect extends Field
+class DateTime extends Field
 {
     public function __construct(
         string $name,
-        $value,
+               $value,
         bool $required = false,
         bool $disabled = false,
         bool $readonly = false,
@@ -17,13 +17,13 @@ class WireSelect extends Field
         ?string $placeholder = null,
         ?string $help = null,
 
-        public ?string $model = null,
-        public ?string $createNewModel = null,
-        public ?string $createNewField = null,
-        public bool $nullable = false,
-        public bool $searchable = false,
-        public string $orderDir = 'asc',
-        public ?string $emitUp = null
+        public bool $allowClear = false,
+        public bool $time = false,
+        public ?string $format = 'Y-m-d',
+        public ?string $timeFormat = 'Y-m-d H:i',
+        public ?string $mode = 'single',
+        public ?string $prepend = null,
+        public ?string $append = null
     ) {
         parent::__construct(
             $name,
@@ -40,7 +40,7 @@ class WireSelect extends Field
 
     public function render(): View
     {
-        return view('wireforms::components.fields.wire-select')
+        return view('wireforms::components.fields.date-time')
             ->with($this->data());
     }
 }
