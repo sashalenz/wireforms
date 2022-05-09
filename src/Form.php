@@ -62,7 +62,7 @@ abstract class Form extends ModalComponent
                 fn (FormFieldContract $value) => $value->getNameOrWireModel() === $field
             );
 
-        if (!$formField) {
+        if (! $formField) {
             return;
         }
 
@@ -70,7 +70,7 @@ abstract class Form extends ModalComponent
             ->mapWithKeys(fn ($rules, $key) => [
                 $key => collect($rules)
                     ->reject(fn ($rule) => Str::of($rule)->startsWith(['required', 'confirmed']))
-                    ->all()
+                    ->all(),
             ])
             ->all();
 

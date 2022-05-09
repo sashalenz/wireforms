@@ -16,7 +16,6 @@ class WireSelect extends Field
         ?string $label = null,
         ?string $placeholder = null,
         ?string $help = null,
-
         public ?string $model = null,
         public ?string $createNewModel = null,
         public ?string $createNewField = null,

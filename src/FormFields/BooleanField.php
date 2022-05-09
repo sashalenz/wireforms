@@ -8,7 +8,7 @@ use Sashalenz\Wireforms\Contracts\FieldContract;
 class BooleanField extends FormField
 {
     protected array $rules = [
-        'boolean'
+        'boolean',
     ];
 
     public function castValue($value): bool
