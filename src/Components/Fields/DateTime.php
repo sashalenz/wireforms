@@ -8,7 +8,7 @@ class DateTime extends Field
 {
     public function __construct(
         string $name,
-               $value,
+        $value,
         bool $required = false,
         bool $disabled = false,
         bool $readonly = false,
@@ -16,7 +16,6 @@ class DateTime extends Field
         ?string $label = null,
         ?string $placeholder = null,
         ?string $help = null,
-
         public bool $allowClear = false,
         public bool $time = false,
         public ?string $format = 'Y-m-d',
