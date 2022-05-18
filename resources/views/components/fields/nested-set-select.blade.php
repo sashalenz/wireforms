@@ -20,6 +20,7 @@
             :nullable="$nullable"
             :order-dir="$orderDir"
             :value="$value"
+            :emit-up="$emitUp"
             :key="'wireselect-'.$name"
         />
     </div>

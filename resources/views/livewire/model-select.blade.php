@@ -1,4 +1,4 @@
-<div class="flex-1">
+<div class="flex-1 w-full">
     <input type="hidden" name="{{ $name }}" value="{{ $this->selectedValue }}">
     @isset($this->titleKey)
         <input type="hidden" name="{{ $this->titleKey }}" value="{{ $this->titleValue }}">

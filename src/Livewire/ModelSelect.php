@@ -21,15 +21,19 @@ abstract class ModelSelect extends Component
     public ?int $minInputLength = null;
     public ?string $createNewModel = null;
     public ?string $createNewField = null;
-    public string $emitUp = 'updatedChild';
+    public ?string $emitUp = 'updatedChild';
 
     protected $listeners = [
         'fillParent',
     ];
 
-    public function fillParent($value): void
+    public function fillParent(?string $value = null): void
     {
-        $this->setSelected($value);
+        if ($this->value === $value) {
+            return;
+        }
+
+        $this->value = $value;
     }
 
     abstract public function showResults(): bool;

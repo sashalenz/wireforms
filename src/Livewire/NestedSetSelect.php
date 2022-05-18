@@ -47,7 +47,7 @@ class NestedSetSelect extends ModelSelect
 
         $this->value = $value;
 
-        $this->emitUp('updatedChild', $this->name, $this->value);
+        $this->emitUp($this->emitUp, $this->name, $this->value);
     }
 
     public function showResults(): bool
@@ -106,22 +106,25 @@ class NestedSetSelect extends ModelSelect
         }
 
         return $this->searchQuery()
+            ->whereNull('parent_id')
             ->when(
                 $this->searchable,
                 fn ($query) => $query
-                    ->whereNull('parent_id')
-                    ->where(
+                    ->orWhere(
                         fn ($query) => $query
                             ->tap(new SearchFilter($this->search))
-                            ->orWhereHas(
+                            ->whereHas(
                                 'sortedChildren',
                                 fn ($query) => $query->tap(new SearchFilter($this->search))
                             )
                     )
-                    ->with([
-                        'sortedChildren' => fn ($query) => $query->tap(new SearchFilter($this->search)),
-                    ])
             )
+            ->with([
+                'sortedChildren' => fn ($query) => $query->when(
+                    $this->searchable && $this->search,
+                    fn ($query) => $query->tap(new SearchFilter($this->search))
+                )
+            ])
             ->orderBy(
                 $this->getModelKeyNameProperty(),
                 $this->orderDir

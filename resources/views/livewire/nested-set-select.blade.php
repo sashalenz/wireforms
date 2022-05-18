@@ -60,7 +60,7 @@
                         class="max-h-60 pt-1 text-base leading-6 overflow-auto focus:outline-none sm:text-sm sm:leading-5"
                     >
                         @forelse($this->results as $key => $value)
-                            <li id="listbox-option-null"
+                            <li id="listbox-optgroup-{{ $key }}"
                                 role="option"
                                 class="group uppercase text-xs text-gray-300 cursor-default select-none relative py-1 pl-3"
                                 wire:key="listbox-optgroup-{{ $key }}"
