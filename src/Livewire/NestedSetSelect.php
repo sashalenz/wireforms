@@ -97,7 +97,7 @@ class NestedSetSelect extends ModelSelect
                 'sortedChildren' => fn ($query) => $query->when(
                     $this->searchable && $this->search,
                     fn ($query) => $query->tap(new SearchFilter($this->search))
-                )
+                ),
             ])
             ->orderBy(
                 $this->orderBy ?? $this->getModelKeyNameProperty(),
