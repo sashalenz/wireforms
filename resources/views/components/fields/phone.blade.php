@@ -11,7 +11,16 @@
     :help="$help"
     {{ $attributes->whereDoesntStartWith('wire:') }}
 >
-    <div class="relative flex w-full" x-data="{ value: '{{ $value }}', mask: '+38 (099) 999-99-99' }">
+    <div class="relative flex w-full"
+         x-data="{
+            value: '{{ $value }}',
+            mask: '+38 (099) 999-99-99',
+            init() {
+                $watch('value', value => $wire.emit('updatedChild', '{{ $id }}', value.replace(/[^\d+]/g, '')))
+            }
+         }"
+         x-init="init"
+    >
         @isset($prepend)
             {{ $prepend }}
         @endisset
@@ -32,7 +41,6 @@
             ])
             @if($required) required="required" @endif
             @disabled($disabled)
-            x-init="$watch('value', value => $wire.emit('updatedChild', '{{ $id }}', value.replace(/[^\d+]/g, '')))"
             x-mask:dynamic="mask"
             x-on:input="if ($el.value.length === mask.length) { value = $el.value }"
         >

@@ -18,6 +18,7 @@
             :readonly="$readonly"
             :searchable="$searchable"
             :nullable="$nullable"
+            :order-by="$orderBy"
             :order-dir="$orderDir"
             :value="$value"
             :emit-up="$emitUp"

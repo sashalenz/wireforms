@@ -5,7 +5,6 @@ namespace Sashalenz\Wireforms;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 use LivewireUI\Modal\ModalComponent;
 use RuntimeException;
@@ -32,16 +31,6 @@ abstract class Form extends ModalComponent
 //
     }
 
-    protected function defaults(): array
-    {
-        return $this->fields
-            ->filter(fn (FormFieldContract $field) => ! is_null($field->getDefault()))
-            ->mapWithKeys(fn (FormFieldContract $field) => [
-                $field->getName() => $field->getDefault(),
-            ])
-            ->toArray();
-    }
-
     public function rules(): array
     {
         return $this->fields
@@ -50,50 +39,40 @@ abstract class Form extends ModalComponent
             ->toArray();
     }
 
-    public function updating(string $key, ?string $value = null): void
+    public function updating(string $key, $value = null): void
     {
         $this->validateField($key, $value);
+
+        info(print_r($this->model, 1));
     }
 
-    public function validateField(string $field, ?string $value = null): void
+    public function validateField(string $field, $value = null)
     {
-        $formField = $this->fields
+        $formField = $this->fields()
             ->first(
-                fn (FormFieldContract $value) => $value->getNameOrWireModel() === $field
+                fn (FormFieldContract $formField) => $formField->getNameOrWireModel() === $field
             );
 
-        if (! $formField) {
-            return;
+        if (! $formField || !$formField->hasRules()) {
+            return $value;
         }
 
-        $rules = collect($formField->getRules())
-            ->mapWithKeys(fn ($rules, $key) => [
-                $key => collect($rules)
-                    ->reject(fn ($rule) => Str::of($rule)->startsWith(['required', 'confirmed']))
-                    ->all(),
-            ])
-            ->all();
-
-        if (empty($rules)) {
-            return;
-        }
-
-        $this
+        return $this
             ->withValidator(
                 fn (Validator $validator) => $validator->setData(
-                    Arr::undot([$field => $value])
+                    Arr::undot([$field => $formField->beforeValidate($value)])
                 )
             )
             ->validateOnly(
                 $field,
-                $rules
+                $formField->getRules()
             );
     }
 
     public function getFieldsProperty(): Collection
     {
-        if (count($this->fillFields)) {
-            $this->model->fill($this->fillFields);
+        foreach($this->fillFields as $field => $value) {
+            $this->updatedChild('model.'.$field, $value);
         }
 
         return $this->fields()

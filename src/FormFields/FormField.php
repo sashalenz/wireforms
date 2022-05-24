@@ -4,6 +4,7 @@ namespace Sashalenz\Wireforms\FormFields;
 
 use Closure;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Conditionable;
 use Sashalenz\Wireforms\Contracts\FieldContract;
@@ -14,9 +15,10 @@ abstract class FormField implements FormFieldContract
     use Conditionable;
 
     protected $value;
-    protected ?string $default = null;
+    protected $default;
 
     protected ?bool $required = false;
+    protected ?bool $disabled = false;
     protected ?string $placeholder = null;
     protected ?string $help = null;
 
@@ -28,6 +30,7 @@ abstract class FormField implements FormFieldContract
     protected ?Closure $styleCallback = null;
     protected ?Closure $displayCondition = null;
 
+    public bool $isWireModel = true;
     public ?string $wireModel = null;
 
     public function __construct(
@@ -55,10 +58,24 @@ abstract class FormField implements FormFieldContract
         return $this;
     }
 
+    public function default($default): self
+    {
+        $this->default = $this->castValue($default);
+
+        return $this;
+    }
+
     public function required(): self
     {
         $this->required = true;
         $this->rules[] = 'required';
+
+        return $this;
+    }
+
+    public function disabled(?bool $disabled = true): self
+    {
+        $this->disabled = $disabled;
 
         return $this;
     }
@@ -73,13 +90,6 @@ abstract class FormField implements FormFieldContract
     public function placeholder(?string $placeholder = null): self
     {
         $this->placeholder = $placeholder;
-
-        return $this;
-    }
-
-    public function default(string $default): self
-    {
-        $this->default = $this->castValue($default);
 
         return $this;
     }
@@ -145,7 +155,7 @@ abstract class FormField implements FormFieldContract
             )
             ->when(
                 $this->size,
-                fn ($class) => $class->push('col-span-'.$this->size)
+                fn ($class) => $class->push('col-span-6 sm:col-span-'.$this->size)
             )
             ->filter()
             ->flatten()
@@ -169,8 +179,7 @@ abstract class FormField implements FormFieldContract
     {
         return collect($this->rules)
             ->flatten()
-            ->unique()
-            ->all();
+            ->toArray();
     }
 
     public function castValue($value)
@@ -207,10 +216,10 @@ abstract class FormField implements FormFieldContract
                 ->when(
                     $model,
                     fn (FormFieldContract $field) => $field->value(
-                        data_get($model?->toArray(), $field->getName())
+                        Arr::get($model?->toArray(), $field->getName())
                     )
                 )
-                ->render(),
+                ->render()
         ]);
     }
 
@@ -230,9 +239,9 @@ abstract class FormField implements FormFieldContract
             ->map(
                 fn (FieldContract $field) => $field
                     ->withAttributes($this->attributes + [
-                        'class' => $class,
-                        'wire:model.debounce.500ms' => $field->name,
-                    ])
+                            'class' => $class,
+                            'wire:model.debounce.500ms' => $field->name,
+                        ])
                     ->render()
             )
             ->toArray();

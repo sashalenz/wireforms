@@ -10,32 +10,6 @@ use Sashalenz\Searchable\Filters\SearchFilter;
 
 class NestedSetSelect extends ModelSelect
 {
-    public string $model;
-
-    public function mount(
-        string $name,
-        string $model,
-        string $placeholder = null,
-        string $createNewModel = null,
-        string $createNewField = null,
-        string $value = null,
-        bool $required = false,
-        bool $readonly = false,
-        string $orderDir = 'asc',
-        bool $searchable = true
-    ): void {
-        $this->name = $name;
-        $this->required = $required;
-        $this->placeholder = $placeholder;
-        $this->value = $value;
-        $this->model = $model;
-        $this->createNewModel = $createNewModel;
-        $this->createNewField = $createNewField;
-        $this->readonly = $readonly;
-        $this->orderDir = $orderDir;
-        $this->searchable = $searchable;
-    }
-
     public function setSelected($value): void
     {
         $this->search = '';
@@ -126,7 +100,7 @@ class NestedSetSelect extends ModelSelect
                 )
             ])
             ->orderBy(
-                $this->getModelKeyNameProperty(),
+                $this->orderBy ?? $this->getModelKeyNameProperty(),
                 $this->orderDir
             )
             ->take($this->limit)

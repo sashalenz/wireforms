@@ -18,7 +18,10 @@
                 @lang('wireforms::form.close')
             </x-wireforms::button.secondary>
 
-            <x-wireforms::button.primary wire:click="save">
+            <x-wireforms::button.primary
+                wire:click="save"
+                :disabled="$errors->any()"
+            >
                 @lang('wireforms::form.save')
             </x-wireforms::button.primary>
         </div>

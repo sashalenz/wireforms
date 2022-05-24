@@ -80,6 +80,7 @@ class WireSelectField extends FormField
                 orderDir: $this->orderDir,
                 label: $this->label,
                 required: $this->required,
+                disabled: $this->disabled,
                 createNewModel: $this->createNewModel,
                 createNewField: $this->createNewField
             );
@@ -94,6 +95,7 @@ class WireSelectField extends FormField
             orderDir: $this->orderDir,
             label: $this->label,
             required: $this->required,
+            disabled: $this->disabled,
             createNewModel: $this->createNewModel,
             createNewField: $this->createNewField
         );

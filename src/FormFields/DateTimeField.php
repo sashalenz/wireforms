@@ -59,7 +59,8 @@ class DateTimeField extends FormField
             format: $this->format,
             timeFormat: $this->timeFormat,
             mode: $this->mode,
-            required: $this->required
+            required: $this->required,
+            disabled: $this->disabled
         );
     }
 }

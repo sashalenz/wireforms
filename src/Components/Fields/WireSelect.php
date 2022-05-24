@@ -21,7 +21,8 @@ class WireSelect extends Field
         public ?string $createNewField = null,
         public bool $nullable = false,
         public bool $searchable = false,
-        public string $orderDir = 'asc',
+        public ?string $orderBy = null,
+        public ?string $orderDir = null,
         public ?string $emitUp = null
     ) {
         parent::__construct(
