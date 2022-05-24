@@ -219,7 +219,7 @@ abstract class FormField implements FormFieldContract
                         Arr::get($model?->toArray(), $field->getName())
                     )
                 )
-                ->render()
+                ->render(),
         ]);
     }
 

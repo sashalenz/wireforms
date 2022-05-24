@@ -2,7 +2,6 @@
 
 namespace Sashalenz\Wireforms\Traits;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 trait HasChild
@@ -19,7 +18,7 @@ trait HasChild
         $validated = $this->validateField($key, $value);
 
         $this->fill([
-            $key => $validated
+            $key => $validated,
         ]);
 
         $method = Str::of($key)

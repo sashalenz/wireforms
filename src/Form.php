@@ -53,7 +53,7 @@ abstract class Form extends ModalComponent
                 fn (FormFieldContract $formField) => $formField->getNameOrWireModel() === $field
             );
 
-        if (! $formField || !$formField->hasRules()) {
+        if (! $formField || ! $formField->hasRules()) {
             return $value;
         }
 
@@ -71,7 +71,7 @@ abstract class Form extends ModalComponent
 
     public function getFieldsProperty(): Collection
     {
-        foreach($this->fillFields as $field => $value) {
+        foreach ($this->fillFields as $field => $value) {
             $this->updatedChild('model.'.$field, $value);
         }
 
