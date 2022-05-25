@@ -11,7 +11,9 @@ interface FormFieldContract
 
     public function getNameOrWireModel(): string;
 
-    public function getDefault(): ?string;
+    public function getDefault();
+
+    public function hasDefault(): bool;
 
     public function getRules(): array;
 

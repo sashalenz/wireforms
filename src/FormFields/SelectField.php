@@ -32,6 +32,8 @@ class SelectField extends FormField
             options: $this->options,
             nullable: $this->nullable,
             label: $this->label,
+            help: $this->help,
+            placeholder: $this->placeholder,
             required: $this->required,
             disabled: $this->disabled
         );

@@ -9,16 +9,18 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Conditionable;
 use Sashalenz\Wireforms\Contracts\FieldContract;
 use Sashalenz\Wireforms\Contracts\FormFieldContract;
+use Sashalenz\Wireforms\Traits\HasDisable;
+use Sashalenz\Wireforms\Traits\HasRequired;
 
 abstract class FormField implements FormFieldContract
 {
     use Conditionable;
+    use HasDisable;
+    use HasRequired;
 
     protected $value;
     protected $default;
 
-    protected ?bool $required = false;
-    protected ?bool $disabled = false;
     protected ?string $placeholder = null;
     protected ?string $help = null;
 
@@ -30,13 +32,13 @@ abstract class FormField implements FormFieldContract
     protected ?Closure $styleCallback = null;
     protected ?Closure $displayCondition = null;
 
-    public bool $isWireModel = true;
-    public ?string $wireModel = null;
+    public string $wireModel;
 
     public function __construct(
         protected string $name,
         protected ?string $label = null
     ) {
+        $this->wireModel = 'model.' . $name;
     }
 
     public static function make(string $name, ?string $label): static
@@ -61,21 +63,6 @@ abstract class FormField implements FormFieldContract
     public function default($default): self
     {
         $this->default = $this->castValue($default);
-
-        return $this;
-    }
-
-    public function required(): self
-    {
-        $this->required = true;
-        $this->rules[] = 'required';
-
-        return $this;
-    }
-
-    public function disabled(?bool $disabled = true): self
-    {
-        $this->disabled = $disabled;
 
         return $this;
     }
@@ -178,6 +165,9 @@ abstract class FormField implements FormFieldContract
     protected function formatRules(): array
     {
         return collect($this->rules)
+            ->when(
+                $this->required,
+            )
             ->flatten()
             ->toArray();
     }
@@ -202,9 +192,19 @@ abstract class FormField implements FormFieldContract
         return $this->wireModel ?? $this->name;
     }
 
-    public function getDefault(): string
+    public function getDefault()
     {
         return $this->default;
+    }
+
+    public function hasDefault(): bool
+    {
+        return !is_null($this->default);
+    }
+
+    private function canDisplay(?Model $model = null): bool
+    {
+        return !is_callable($this->displayCondition) || call_user_func($this->displayCondition, $model);
     }
 
     abstract protected function render(): FieldContract;
@@ -225,15 +225,14 @@ abstract class FormField implements FormFieldContract
 
     public function renderIt(?Model $model = null): ?array
     {
-        $condition = is_callable($this->displayCondition)
-            ? call_user_func($this->displayCondition, $model)
-            : true;
-
-        if ((bool) $condition === false) {
+        if (!$this->canDisplay($model)) {
             return null;
         }
 
         $class = $this->getClass($model);
+
+        $this->determinateDisabled($model);
+        $this->determinateRequired($model);
 
         return $this->renderField($model)
             ->map(

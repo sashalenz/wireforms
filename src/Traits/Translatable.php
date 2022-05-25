@@ -38,7 +38,7 @@ trait Translatable
 
     public function renderField(?Model $model = null): Collection
     {
-        if (! $this->translatable) {
+        if (!$this->translatable) {
             return collect([
                 $this
                     ->when(

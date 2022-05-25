@@ -3,8 +3,8 @@
 namespace Sashalenz\Wireforms;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 use LivewireUI\Modal\ModalComponent;
 use RuntimeException;
@@ -42,13 +42,11 @@ abstract class Form extends ModalComponent
     public function updating(string $key, $value = null): void
     {
         $this->validateField($key, $value);
-
-        info(print_r($this->model, 1));
     }
 
     public function validateField(string $field, $value = null)
     {
-        $formField = $this->fields()
+        $formField = $this->fields
             ->first(
                 fn (FormFieldContract $formField) => $formField->getNameOrWireModel() === $field
             );
@@ -57,30 +55,57 @@ abstract class Form extends ModalComponent
             return $value;
         }
 
+        $data = $this->model->replicate();
+
         return $this
             ->withValidator(
-                fn (Validator $validator) => $validator->setData(
-                    Arr::undot([$field => $formField->beforeValidate($value)])
-                )
+                fn (Validator $validator) => $validator->setData([
+                    'model' => $data
+                        ->forceFill([
+                            Str::of($field)->replaceFirst('model.', '')->toString() => $formField->beforeValidate($value)
+                        ])
+                        ->toArray()
+                ])
             )
             ->validateOnly(
-                $field,
+                $formField->getNameOrWireModel(),
                 $formField->getRules()
             );
     }
 
-    public function getFieldsProperty(): Collection
+    private function fillDefaults(): void
     {
-        foreach($this->fillFields as $field => $value) {
-            $this->updatedChild('model.'.$field, $value);
+        if (!$this->model?->getKey()) {
+            $this->fields
+                ->filter(
+                    fn (FormFieldContract $field) => $field->hasDefault()
+                )
+                ->each(fn (FormFieldContract $field) => $this->fillWithHydrate(
+                    $field->getNameOrWireModel(),
+                    $field->getDefault()
+                ));
         }
 
+        if (count($this->fillFields)) {
+            $this->fields
+                ->filter(
+                    fn (FormFieldContract $field) => isset($this->fillFields[$field->getName()])
+                )
+                ->each(fn (FormFieldContract $field) => $this->fillWithHydrate(
+                    $field->getNameOrWireModel(),
+                    $this->fillFields[$field->getName()]
+                ));
+        }
+    }
+
+    public function getFieldsProperty(): Collection
+    {
         return $this->fields()
             ->filter(
                 fn ($field) => $field instanceof FormFieldContract
             )
-            ->each(
-                fn (FormFieldContract $field) => $field->wireModel("model.{$field->getName()}")
+            ->filter(
+                fn ($field) => !method_exists($field, 'canSee') || $field->canRender
             );
     }
 
@@ -121,9 +146,11 @@ abstract class Form extends ModalComponent
 
     public function render(): View
     {
+        $this->fillDefaults();
+
         return view('wireforms::form', [
             'fields' => $this->fields
-                ->map(fn ($field) => $field->renderIt($this->model))
+                ->map(fn (FormFieldContract $field) => $field->renderIt($this->model))
                 ->flatten(),
             'title' => collect([
                 $this->title(),

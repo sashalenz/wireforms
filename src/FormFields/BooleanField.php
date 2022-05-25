@@ -21,7 +21,9 @@ class BooleanField extends FormField
         return Boolean::make(
             name: $this->getNameOrWireModel(),
             value: $this->value,
-            label: $this->label
+            label: $this->label,
+            help: $this->help,
+            placeholder: $this->placeholder
         );
     }
 }

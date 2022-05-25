@@ -8,20 +8,32 @@
     {{ $attributes->whereDoesntStartWith(['min', 'max', 'step', 'data', 'x-', 'wire:model', 'wire:change']) }}
 >
     <div class="relative flex w-full"
-         wire:key="{{ mt_rand() }}"
-         x-data="{{ $value ?? '{amount: 0, currency: \'USD\'}' }}"
+         x-data="{
+            amount: '',
+            value: @entangle($attributes->wire('model')),
+            currency: 'USD',
+            update() {
+                try {
+                    parsedValue = JSON.parse(this.value);
+                    this.amount = Number.parseInt(parsedValue.amount) / 100;
+                    this.currency = parsedValue.currency;
+                } catch (e) {};
+            }
+         }"
          x-init="
-             amount = Number.parseFloat(amount / 100);
-             console.log(currency);
+             update();
              $watch('amount', value => $wire.emit('updatedChild', '{{ $id }}', {
-                 amount: Number.parseFloat(value * 100).toFixed(0),
-                 currency: currency
+                amount: Number.parseFloat(value * 100).toFixed(0),
+                currency: currency
              }))
          "
+         @update-currency.window="update()"
     >
         <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
-            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
             </svg>
         </div>
         <input type="number"

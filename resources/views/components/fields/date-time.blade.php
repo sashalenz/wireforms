@@ -39,7 +39,7 @@
                @if($required) required="required" @endif
                @disabled($disabled)
         >
-        @if($allowClear)
+        @if($allowClear && !$disabled)
             <span class="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer" x-show="$refs.input.value" x-on:click.prevent="value = null && $refs.input.flatpickr().clear()">
                 <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

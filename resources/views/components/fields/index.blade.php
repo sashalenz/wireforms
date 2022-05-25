@@ -7,7 +7,7 @@
     'help' => null
 ])
 
-<fieldset {{ $attributes->class('space-y-1') }}>
+<fieldset {{ $attributes->class('space-y-1') }} wire:key="{{ $id }}">
     @if($showLabel)
         <label for="{{ $id }}" @class(['block text-sm text-gray-600', 'font-semibold' => $required])>
             {{ $label }}

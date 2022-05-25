@@ -26,6 +26,8 @@ class TextareaField extends FormField
             value: $this->value,
             label: $this->label,
             rows: $this->rows,
+            help: $this->help,
+            placeholder: $this->placeholder,
             required: $this->required,
             disabled: $this->disabled
         );

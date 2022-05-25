@@ -9,6 +9,14 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 trait Authorizable
 {
     use AuthorizesRequests;
+    public bool $canRender = true;
+
+    public function canSee(string $ability, string $model): self
+    {
+        $this->canRender = $this->authorizeModel($ability, $model);
+
+        return $this;
+    }
 
     private function authorizeModel(string $ability, Model|string $model): bool
     {

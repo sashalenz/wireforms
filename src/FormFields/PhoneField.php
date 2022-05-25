@@ -24,6 +24,8 @@ class PhoneField extends FormField
             name: $this->getNameOrWireModel(),
             value: $this->value,
             label: $this->label,
+            help: $this->help,
+            placeholder: $this->placeholder,
             required: $this->required,
             disabled: $this->disabled
         );

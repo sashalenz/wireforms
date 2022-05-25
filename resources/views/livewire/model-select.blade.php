@@ -10,16 +10,18 @@
                 :aria-expanded="open ? 'true' : 'false'"
                 aria-labelledby="listbox-label"
                 x-on:click.prevent="open = (readonly) ? false : !open"
-                class="relative w-full border pl-3 pr-10 py-1.5 text-left cursor-pointer transition ease-in-out duration-150 sm:text-sm sm:leading-5 focus:outline-none focus:shadow-full focus:shadow-primary-100/50"
-                :class="{'bg-gray-100': readonly, 'bg-white': !readonly, 'border-primary-300 border-b-white': open, 'border-gray-200 focus:border-primary-300': !open }"
+                class="relative w-full border pl-3 pr-10 py-1.5 text-left cursor-pointer transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                :class="{'bg-gray-50 cursor-not-allowed': readonly, 'bg-white cursor-pointer focus:outline-none focus:shadow-full focus:shadow-primary-100/50': !readonly, 'border-primary-300 border-b-white': open, 'border-gray-200 focus:border-primary-300': !open }"
         >
             @if($this->selectedValue)
                 <span class="block truncate text-gray-700">{{ $this->selectedTitle }}</span>
-                <span class="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer" x-on:click.prevent="$wire.call('setSelected', null)">
-                    <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </span>
+                @if(!$readonly)
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-2" :class="{'cursor-pointer': !readonly, 'cursor-not-allowed': readonly}" x-on:click.prevent="(readonly) ? false : $wire.call('setSelected', null)">
+                        <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </span>
+                @endif
             @else
                 <span class="block truncate text-gray-400">{{ ($placeholder ?? __('admin.please_select')) }}</span>
                 <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">

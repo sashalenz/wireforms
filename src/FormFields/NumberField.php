@@ -41,6 +41,8 @@ class NumberField extends TextField
             value: $this->value,
             label: $this->label,
             type: $this->type,
+            help: $this->help,
+            placeholder: $this->placeholder,
             required: $this->required,
             disabled: $this->disabled
         )->withAttributes(

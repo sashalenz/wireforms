@@ -79,8 +79,10 @@ class WireSelectField extends FormField
                 searchable: $this->searchable,
                 orderDir: $this->orderDir,
                 label: $this->label,
+                help: $this->help,
+                placeholder: $this->placeholder,
                 required: $this->required,
-                disabled: $this->disabled,
+                readonly: $this->disabled,
                 createNewModel: $this->createNewModel,
                 createNewField: $this->createNewField
             );
@@ -94,8 +96,10 @@ class WireSelectField extends FormField
             searchable: $this->searchable,
             orderDir: $this->orderDir,
             label: $this->label,
+            help: $this->help,
+            placeholder: $this->placeholder,
             required: $this->required,
-            disabled: $this->disabled,
+            readonly: $this->disabled,
             createNewModel: $this->createNewModel,
             createNewField: $this->createNewField
         );

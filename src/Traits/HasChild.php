@@ -2,7 +2,6 @@
 
 namespace Sashalenz\Wireforms\Traits;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 trait HasChild
@@ -14,12 +13,10 @@ trait HasChild
         ]);
     }
 
-    public function updatedChild($key, $value): void
+    protected function fillWithHydrate($key, $value): void
     {
-        $validated = $this->validateField($key, $value);
-
         $this->fill([
-            $key => $validated
+            $key => is_int($value) ? (int)$value : $value
         ]);
 
         $method = Str::of($key)
@@ -31,5 +28,12 @@ trait HasChild
         if (method_exists($this, $method)) {
             $this->$method($value);
         }
+    }
+
+    public function updatedChild($key, $value): void
+    {
+        $this->validateField($key, $value);
+
+        $this->fillWithHydrate($key, $value);
     }
 }
