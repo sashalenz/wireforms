@@ -27,7 +27,7 @@ trait HasRequired
 
     private function determinateRequired(?Model $model = null): void
     {
-        if (!is_callable($this->requiredCondition)) {
+        if (! is_callable($this->requiredCondition)) {
             return;
         }
 
