@@ -10,11 +10,13 @@ use LivewireUI\Modal\ModalComponent;
 use RuntimeException;
 use Sashalenz\Wireforms\Contracts\FormFieldContract;
 use Sashalenz\Wireforms\Traits\HasChild;
+use Sashalenz\Wireforms\Traits\HasDefaults;
 
 abstract class Form extends ModalComponent
 {
     use HasChild;
-    public array $fillFields = [];
+    use HasDefaults;
+
     public bool $parentModal = false;
 
     abstract protected function fields(): Collection;
@@ -73,31 +75,6 @@ abstract class Form extends ModalComponent
             );
     }
 
-    private function fillDefaults(): void
-    {
-        if (!$this->model?->getKey()) {
-            $this->fields
-                ->filter(
-                    fn (FormFieldContract $field) => $field->hasDefault()
-                )
-                ->each(fn (FormFieldContract $field) => $this->fillWithHydrate(
-                    $field->getNameOrWireModel(),
-                    $field->getDefault()
-                ));
-        }
-
-        if (count($this->fillFields)) {
-            $this->fields
-                ->filter(
-                    fn (FormFieldContract $field) => isset($this->fillFields[$field->getName()])
-                )
-                ->each(fn (FormFieldContract $field) => $this->fillWithHydrate(
-                    $field->getNameOrWireModel(),
-                    $this->fillFields[$field->getName()]
-                ));
-        }
-    }
-
     public function getFieldsProperty(): Collection
     {
         return $this->fields()
@@ -146,8 +123,6 @@ abstract class Form extends ModalComponent
 
     public function render(): View
     {
-        $this->fillDefaults();
-
         return view('wireforms::form', [
             'fields' => $this->fields
                 ->map(fn (FormFieldContract $field) => $field->renderIt($this->model))
