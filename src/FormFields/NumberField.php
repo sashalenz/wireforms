@@ -49,7 +49,7 @@ class NumberField extends TextField
             array_filter([
                 'min' => $this->min,
                 'max' => $this->max,
-                'step' => $this->step
+                'step' => $this->step,
             ])
         );
     }

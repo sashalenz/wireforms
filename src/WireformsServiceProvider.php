@@ -27,7 +27,7 @@ class WireformsServiceProvider extends PackageServiceProvider
             \Sashalenz\Wireforms\Components\Fields\DateTime::class,
             \Sashalenz\Wireforms\Components\Fields\Boolean::class,
             \Sashalenz\Wireforms\Components\Fields\Phone::class,
-            \Sashalenz\Wireforms\Components\Fields\Money::class
+            \Sashalenz\Wireforms\Components\Fields\Money::class,
         ]);
 
         Livewire::component(

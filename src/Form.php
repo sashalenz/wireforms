@@ -51,7 +51,7 @@ abstract class Form extends ModalComponent
                 fn (FormFieldContract $formField) => $formField->getNameOrWireModel() === $field
             );
 
-        if (! $formField || !$formField->hasRules()) {
+        if (! $formField || ! $formField->hasRules()) {
             return $value;
         }
 

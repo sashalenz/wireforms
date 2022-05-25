@@ -16,7 +16,7 @@ trait HasChild
     protected function fillWithHydrate($key, $value): void
     {
         $this->fill([
-            $key => is_int($value) ? (int)$value : $value
+            $key => $value
         ]);
 
         $method = Str::of($key)
