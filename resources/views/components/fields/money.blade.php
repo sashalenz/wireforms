@@ -11,18 +11,18 @@
          x-data="{
             amount: '',
             value: @entangle($attributes->wire('model')),
-            currency: 'USD',
+            currency: '',
             update() {
                 try {
                     parsedValue = JSON.parse(this.value);
                     this.amount = Number.parseInt(parsedValue.amount) / 100;
                     this.currency = parsedValue.currency;
-                } catch (e) {};
+                } catch (e) { console.log(e) };
             }
          }"
          x-init="
              update();
-             $watch('amount', value => $wire.emit('updatedChild', '{{ $id }}', {
+             $watch('amount', value => (value && currency) && $wire.emit('updatedChild', '{{ $id }}', {
                 amount: Number.parseFloat(value * 100).toFixed(0),
                 currency: currency
              }))
