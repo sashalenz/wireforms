@@ -62,9 +62,9 @@ abstract class Form extends ModalComponent
                 fn (Validator $validator) => $validator->setData([
                     'model' => $data
                         ->forceFill([
-                            Str::of($field)->replaceFirst('model.', '')->toString() => $formField->beforeValidate($value)
+                            Str::of($field)->replaceFirst('model.', '')->toString() => $formField->beforeValidate($value),
                         ])
-                        ->toArray()
+                        ->toArray(),
                 ])
             )
             ->validateOnly(
@@ -75,7 +75,7 @@ abstract class Form extends ModalComponent
 
     private function fillDefaults(): void
     {
-        if (!$this->model?->getKey()) {
+        if (! $this->model?->getKey()) {
             $this->fields
                 ->filter(
                     fn (FormFieldContract $field) => $field->hasDefault()
@@ -105,7 +105,7 @@ abstract class Form extends ModalComponent
                 fn ($field) => $field instanceof FormFieldContract
             )
             ->filter(
-                fn ($field) => !method_exists($field, 'canSee') || $field->canRender
+                fn ($field) => ! method_exists($field, 'canSee') || $field->canRender
             );
     }
 

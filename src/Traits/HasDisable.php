@@ -26,7 +26,7 @@ trait HasDisable
 
     private function determinateDisabled(?Model $model = null): void
     {
-        if (!is_callable($this->disabledCondition)) {
+        if (! is_callable($this->disabledCondition)) {
             return;
         }
 

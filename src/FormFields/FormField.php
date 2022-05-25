@@ -199,12 +199,12 @@ abstract class FormField implements FormFieldContract
 
     public function hasDefault(): bool
     {
-        return !is_null($this->default);
+        return ! is_null($this->default);
     }
 
     private function canDisplay(?Model $model = null): bool
     {
-        return !is_callable($this->displayCondition) || call_user_func($this->displayCondition, $model);
+        return ! is_callable($this->displayCondition) || call_user_func($this->displayCondition, $model);
     }
 
     abstract protected function render(): FieldContract;
@@ -225,7 +225,7 @@ abstract class FormField implements FormFieldContract
 
     public function renderIt(?Model $model = null): ?array
     {
-        if (!$this->canDisplay($model)) {
+        if (! $this->canDisplay($model)) {
             return null;
         }
 
