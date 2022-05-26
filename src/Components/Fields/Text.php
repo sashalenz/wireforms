@@ -16,6 +16,7 @@ class Text extends Field
         ?string $label = null,
         ?string $placeholder = null,
         ?string $help = null,
+        public bool $allowClear = false,
         public string $type = 'text',
         public ?string $prepend = null,
         public ?string $append = null

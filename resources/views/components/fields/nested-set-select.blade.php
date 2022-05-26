@@ -7,7 +7,9 @@
     :help="$help"
     {{ $attributes->whereDoesntStartWith(['data', 'x-', 'wire:model', 'wire:change']) }}
 >
-    <div class="flex items-center">
+    <div class="flex items-center"
+         {{ $attributes->whereStartsWith(['x-']) }}
+    >
         <livewire:wireforms.livewire.nested-set-select
             :name="$id"
             :model="$model"

@@ -5,9 +5,22 @@
     :label="$label"
     :show-label="$showLabel"
     :help="$help"
-    {{ $attributes->whereDoesntStartWith(['wire:model', 'wire:change']) }}
+    {{ $attributes->whereDoesntStartWith(['wire:model', 'wire:change', 'x-']) }}
 >
-    <div class="input-group" x-data="{ value: @entangle($attributes->wire('model')) }" wire:ignore>
+    <div class="input-group"
+         x-data="{
+            @if($attributes->whereStartsWith('wire:model')->first())
+            value: @entangle($attributes->wire('model')),
+            @else
+            value: '{{ $value }}',
+            @endif
+            reset() {
+                value = null;
+                $refs.input.flatpickr().clear();
+                $dispatch('input');
+            }
+         }"
+         wire:ignore>
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             @isset($prepend)
                 {{ $prepend }}
@@ -29,18 +42,19 @@
                @endif
                @class([
                 'block w-full px-3 py-1.5 border duration-300 transition-all sm:text-sm focus:outline-none focus:shadow-full rounded-sm pl-10',
-                'border-gray-200 text-gray-700 placeholder-gray-300 focus:ring-primary-300 focus:border-primary-300 focus:shadow-primary-100/50' => !$errors->has($id),
+                'border-gray-200 text-gray-700 placeholder-gray-400 focus:ring-primary-300 focus:border-primary-300 focus:shadow-primary-100/50' => !$errors->has($id),
                 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-300 focus:border-red-300 focus:shadow-red-100/75' => $errors->has($id),
-                'pr-10' => isset($slot, $append),
+                'pr-7' => $allowClear && !$disabled,
                ])
                data-time="{{ $time ? 'true' : 'false' }}"
                data-mode="{{ $mode }}"
                data-format="{{ $time ? $timeFormat : $format }}"
                @if($required) required="required" @endif
                @disabled($disabled)
+            {{ $attributes->whereStartsWith(['wire:change', 'x-']) }}
         >
         @if($allowClear && !$disabled)
-            <span class="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer" x-show="$refs.input.value" x-on:click.prevent="value = null && $refs.input.flatpickr().clear()">
+            <span class="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer" x-show="value" x-on:click.prevent="reset()">
                 <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
