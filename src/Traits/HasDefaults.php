@@ -10,7 +10,7 @@ trait HasDefaults
 
     public function mountHasDefaults(): void
     {
-        if (!$this->model?->getKey()) {
+        if (! $this->model?->getKey()) {
             $this->fields
                 ->filter(
                     fn (FormFieldContract $field) => $field->hasDefault()
