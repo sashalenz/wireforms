@@ -9,7 +9,7 @@ class MoneyField extends FormField
 {
     private ?float $min = null;
     private ?float $max = null;
-    private ?float $step = null;
+    private float $step = 0.01;
 
     public function min(float $min): self
     {
