@@ -16,6 +16,7 @@ class NumberField extends TextField
     public function min(float $min): self
     {
         $this->min = $min;
+        $this->rules[] = 'min:'.$min;
 
         return $this;
     }
@@ -23,6 +24,7 @@ class NumberField extends TextField
     public function max(float $max): self
     {
         $this->max = $max;
+        $this->rules[] = 'max:'.$max;
 
         return $this;
     }

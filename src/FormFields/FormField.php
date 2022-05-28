@@ -32,13 +32,21 @@ abstract class FormField implements FormFieldContract
     protected ?Closure $styleCallback = null;
     protected ?Closure $displayCondition = null;
 
+    public bool $exceptFromModel = false;
     public string $wireModel;
 
     public function __construct(
         protected string $name,
         protected ?string $label = null
     ) {
-        $this->wireModel = 'model.' . $name;
+        $this->wireModel(
+            collect([
+                $this->exceptFromModel ? null : 'model',
+                $name
+            ])
+                ->filter()
+                ->implode('.')
+        );
     }
 
     public static function make(string $name, ?string $label): static
@@ -70,6 +78,13 @@ abstract class FormField implements FormFieldContract
     public function wireModel(string $wireModel): self
     {
         $this->wireModel = $wireModel;
+
+        return $this;
+    }
+
+    public function exceptFromModel(): self
+    {
+        $this->exceptFromModel = true;
 
         return $this;
     }

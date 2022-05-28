@@ -3,6 +3,7 @@
 namespace Sashalenz\Wireforms;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
@@ -57,21 +58,15 @@ abstract class Form extends ModalComponent
             return $value;
         }
 
-        $data = $this->model->replicate();
-
         return $this
             ->withValidator(
-                fn (Validator $validator) => $validator->setData([
-                    'model' => $data
-                        ->forceFill([
-                            Str::of($field)->replaceFirst('model.', '')->toString() => $formField->beforeValidate($value),
-                        ])
-                        ->toArray(),
-                ])
+                fn (Validator $validator) => $validator->setData(
+                    Arr::undot([$field => $formField->beforeValidate($value)])
+                )
             )
             ->validateOnly(
                 $formField->getNameOrWireModel(),
-                $formField->getRules()
+                Arr::except($formField->getRules(), 'current')
             );
     }
 
@@ -86,13 +81,22 @@ abstract class Form extends ModalComponent
             );
     }
 
+    protected function performSave(): void
+    {
+        if (!$this->model->isDirty()) {
+            return;
+        }
+
+        $this->validate();
+        $this->model->save();
+    }
+
     public function save(): void
     {
         try {
             $this->beforeSave();
 
-            $this->validate();
-            $this->model->save();
+            $this->performSave();
 
             $this->afterSave();
 
