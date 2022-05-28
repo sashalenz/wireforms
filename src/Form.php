@@ -5,7 +5,6 @@ namespace Sashalenz\Wireforms;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 use LivewireUI\Modal\ModalComponent;
 use RuntimeException;
@@ -83,7 +82,7 @@ abstract class Form extends ModalComponent
 
     protected function performSave(): void
     {
-        if (!$this->model->isDirty()) {
+        if (! $this->model->isDirty()) {
             return;
         }
 

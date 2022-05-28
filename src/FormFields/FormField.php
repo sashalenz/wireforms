@@ -42,7 +42,7 @@ abstract class FormField implements FormFieldContract
         $this->wireModel(
             collect([
                 $this->exceptFromModel ? null : 'model',
-                $name
+                $name,
             ])
                 ->filter()
                 ->implode('.')
