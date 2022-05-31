@@ -24,7 +24,6 @@ abstract class Field extends Component implements FieldContract
         public ?string $key = null,
         public ?string $placeholder = null,
         public ?string $help = null
-
     ) {
         $this->id = $this->id();
     }

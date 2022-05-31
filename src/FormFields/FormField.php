@@ -43,7 +43,7 @@ abstract class FormField implements FormFieldContract
     ) {
         $key = collect([
             $this->exceptFromModel ? null : 'model',
-            $name
+            $name,
         ])
             ->filter()
             ->implode('.');
@@ -278,7 +278,7 @@ abstract class FormField implements FormFieldContract
                 fn (FieldContract $field) => $field
                     ->withAttributes($this->getAttributes() + [
                             'class' => $class,
-                            'wire:model.debounce.500ms' => $field->name
+                            'wire:model.debounce.500ms' => $field->name,
                         ])
                     ->render()
             )
