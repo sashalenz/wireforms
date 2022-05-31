@@ -88,7 +88,7 @@ abstract class Form extends ModalComponent
 
     protected function performSave(): void
     {
-        if (!$this->model->isDirty()) {
+        if (! $this->model->isDirty()) {
             return;
         }
 
