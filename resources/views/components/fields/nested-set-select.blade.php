@@ -8,7 +8,7 @@
     {{ $attributes->whereDoesntStartWith(['data', 'x-', 'wire:model', 'wire:change']) }}
 >
     <div class="flex items-center"
-         {{ $attributes->whereStartsWith(['x-']) }}
+        {{ $attributes->whereStartsWith(['x-']) }}
     >
         <livewire:wireforms.livewire.nested-set-select
             :name="$id"
@@ -23,7 +23,7 @@
             :order-dir="$orderDir"
             :value="$value"
             :emit-up="$emitUp"
-            :key="'wireselect-'.$name"
+            :key="$key ?? $id"
         />
     </div>
 </x-wireforms::fields>

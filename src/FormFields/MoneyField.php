@@ -39,6 +39,7 @@ class MoneyField extends FormField
             value: $this->value,
             label: $this->label,
             help: $this->help,
+            key: $this->key,
             placeholder: $this->placeholder,
             required: $this->required,
             disabled: $this->disabled

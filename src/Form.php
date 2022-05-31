@@ -5,7 +5,6 @@ namespace Sashalenz\Wireforms;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 use LivewireUI\Modal\ModalComponent;
 use RuntimeException;
@@ -19,6 +18,7 @@ abstract class Form extends ModalComponent
     use HasDefaults;
 
     public bool $parentModal = false;
+    private array $emitFields = [];
 
     abstract protected function fields(): Collection;
 
@@ -77,8 +77,13 @@ abstract class Form extends ModalComponent
                 fn ($field) => $field instanceof FormFieldContract
             )
             ->filter(
-                fn ($field) => ! method_exists($field, 'canSee') || $field->canRender
+                fn (FormFieldContract $field) => ! method_exists($field, 'canSee') || $field->canRender
             );
+    }
+
+    public function freshFields(): void
+    {
+        $this->computedPropertyCache['fields'] = $this->getFieldsProperty();
     }
 
     protected function performSave(): void

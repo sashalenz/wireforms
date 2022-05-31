@@ -53,6 +53,7 @@ abstract class ModelSelect extends Component
 
     protected $listeners = [
         'fillParent',
+        'changeModel'
     ];
 
     public function fillParent(?string $value = null): void
@@ -62,6 +63,17 @@ abstract class ModelSelect extends Component
         }
 
         $this->value = $value;
+    }
+
+    public function changeModel(?string $model = null): void
+    {
+        info('model changed ' . $model);
+        if ($this->model === $model) {
+            return;
+        }
+
+        $this->model = $model;
+        $this->value = null;
     }
 
     abstract public function showResults(): bool;

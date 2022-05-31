@@ -14,6 +14,7 @@ class Textarea extends Field
         bool $readonly = false,
         bool $showLabel = true,
         ?string $label = null,
+        ?string $key = null,
         ?string $placeholder = null,
         ?string $help = null,
         public int $rows = 2
@@ -26,6 +27,7 @@ class Textarea extends Field
             $readonly,
             $showLabel,
             $label,
+            $key,
             $placeholder,
             $help
         );

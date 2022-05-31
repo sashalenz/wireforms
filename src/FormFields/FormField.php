@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Conditionable;
 use Sashalenz\Wireforms\Contracts\FieldContract;
 use Sashalenz\Wireforms\Contracts\FormFieldContract;
@@ -23,6 +24,7 @@ abstract class FormField implements FormFieldContract
 
     protected ?string $placeholder = null;
     protected ?string $help = null;
+    protected ?string $key = null;
 
     protected array $rules = [];
     protected array $classes = [];
@@ -39,14 +41,15 @@ abstract class FormField implements FormFieldContract
         protected string $name,
         protected ?string $label = null
     ) {
-        $this->wireModel(
-            collect([
-                $this->exceptFromModel ? null : 'model',
-                $name
-            ])
-                ->filter()
-                ->implode('.')
-        );
+        $key = collect([
+            $this->exceptFromModel ? null : 'model',
+            $name
+        ])
+            ->filter()
+            ->implode('.');
+
+        $this->wireModel($key);
+        $this->keyBy('field-'.$key);
     }
 
     public static function make(string $name, ?string $label): static
@@ -148,6 +151,13 @@ abstract class FormField implements FormFieldContract
         return $this;
     }
 
+    public function keyBy(string $key): self
+    {
+        $this->key = $key;
+
+        return $this;
+    }
+
     protected function getClass(?Model $model = null): ?string
     {
         return collect($this->classes)
@@ -187,6 +197,11 @@ abstract class FormField implements FormFieldContract
             ->toArray();
     }
 
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
     public function castValue($value)
     {
         return $value;
@@ -222,6 +237,15 @@ abstract class FormField implements FormFieldContract
         return ! is_callable($this->displayCondition) || call_user_func($this->displayCondition, $model);
     }
 
+    public function getKebabName(): string
+    {
+        return Str::of($this->getName())
+            ->camel()
+            ->kebab()
+            ->prepend('field-')
+            ->toString();
+    }
+
     abstract protected function render(): FieldContract;
 
     public function renderField(?Model $model = null): Collection
@@ -252,9 +276,9 @@ abstract class FormField implements FormFieldContract
         return $this->renderField($model)
             ->map(
                 fn (FieldContract $field) => $field
-                    ->withAttributes($this->attributes + [
+                    ->withAttributes($this->getAttributes() + [
                             'class' => $class,
-                            'wire:model.debounce.500ms' => $field->name,
+                            'wire:model.debounce.500ms' => $field->name
                         ])
                     ->render()
             )

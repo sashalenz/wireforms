@@ -14,6 +14,7 @@ class DateTime extends Field
         bool $readonly = false,
         bool $showLabel = true,
         ?string $label = null,
+        ?string $key = null,
         ?string $placeholder = null,
         ?string $help = null,
         public bool $allowClear = false,
@@ -32,6 +33,7 @@ class DateTime extends Field
             $readonly,
             $showLabel,
             $label,
+            $key,
             $placeholder,
             $help
         );

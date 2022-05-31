@@ -6,6 +6,7 @@
     :show-label="$showLabel"
     :help="$help"
     {{ $attributes->whereDoesntStartWith(['data', 'x-', 'wire:model', 'wire:change']) }}
+    :wire:key="$key"
 >
     <div class="flex items-center"
         {{ $attributes->whereStartsWith(['x-']) }}
@@ -24,7 +25,7 @@
             :order-dir="$orderDir"
             :value="$value"
             :emit-up="$emitUp"
-            :key="'wireselect-'.$name"
+            :key="$key ?? $id"
         />
     </div>
 </x-wireforms::fields>

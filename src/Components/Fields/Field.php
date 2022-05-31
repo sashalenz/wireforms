@@ -21,8 +21,10 @@ abstract class Field extends Component implements FieldContract
         public bool $readonly = false,
         public bool $showLabel = true,
         public ?string $label = null,
+        public ?string $key = null,
         public ?string $placeholder = null,
         public ?string $help = null
+
     ) {
         $this->id = $this->id();
     }

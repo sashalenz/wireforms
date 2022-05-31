@@ -70,25 +70,11 @@ class WireSelectField extends FormField
 
     protected function render(): FieldContract
     {
-        if ($this->nestedSet) {
-            return NestedSetSelect::make(
-                name: $this->getNameOrWireModel(),
-                value: $this->value,
-                model: $this->model,
-                nullable: $this->nullable,
-                searchable: $this->searchable,
-                orderDir: $this->orderDir,
-                label: $this->label,
-                help: $this->help,
-                placeholder: $this->placeholder,
-                required: $this->required,
-                readonly: $this->disabled,
-                createNewModel: $this->createNewModel,
-                createNewField: $this->createNewField
-            );
-        }
+        $class = ($this->nestedSet)
+            ? NestedSetSelect::class
+            : WireSelect::class;
 
-        return WireSelect::make(
+        return $class::make(
             name: $this->getNameOrWireModel(),
             value: $this->value,
             model: $this->model,
@@ -100,6 +86,7 @@ class WireSelectField extends FormField
             placeholder: $this->placeholder,
             required: $this->required,
             readonly: $this->disabled,
+            key: $this->key,
             createNewModel: $this->createNewModel,
             createNewField: $this->createNewField
         );
