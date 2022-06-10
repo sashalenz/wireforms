@@ -16,6 +16,7 @@ class Text extends Field
         ?string $label = null,
         ?string $placeholder = null,
         ?string $help = null,
+        ?string $key = null,
         public bool $allowClear = false,
         public string $type = 'text',
         public ?string $prepend = null,
@@ -29,6 +30,7 @@ class Text extends Field
             $readonly,
             $showLabel,
             $label,
+            $key,
             $placeholder,
             $help
         );

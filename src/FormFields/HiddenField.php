@@ -12,7 +12,8 @@ class HiddenField extends FormField
         return Hidden::make(
             name: $this->getNameOrWireModel(),
             value: $this->value,
-            label: $this->label
+            label: $this->label,
+            key: $this->key,
         );
     }
 }

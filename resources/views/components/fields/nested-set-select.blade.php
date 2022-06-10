@@ -5,6 +5,7 @@
     :label="$label"
     :show-label="$showLabel"
     :help="$help"
+    :key="$key"
     {{ $attributes->whereDoesntStartWith(['data', 'x-', 'wire:model', 'wire:change']) }}
 >
     <div class="flex items-center"

@@ -16,6 +16,7 @@ class PasswordField extends FormField
             value: $this->value,
             label: $this->label,
             type: 'password',
+            key: $this->key,
             help: $this->help,
             placeholder: $this->placeholder,
             required: $this->required,

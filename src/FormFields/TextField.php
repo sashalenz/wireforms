@@ -35,6 +35,7 @@ class TextField extends FormField
             label: $this->label,
             type: $this->type,
             help: $this->help,
+            key: $this->key,
             placeholder: $this->placeholder,
             required: $this->required,
             disabled: $this->disabled

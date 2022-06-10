@@ -67,7 +67,6 @@ abstract class ModelSelect extends Component
 
     public function changeModel(?string $model = null): void
     {
-        info('model changed ' . $model);
         if ($this->model === $model) {
             return;
         }

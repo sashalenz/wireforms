@@ -23,6 +23,7 @@ class BooleanField extends FormField
             value: $this->value,
             label: $this->label,
             help: $this->help,
+            key: $this->key,
             placeholder: $this->placeholder
         );
     }

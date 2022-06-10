@@ -250,15 +250,14 @@ abstract class FormField implements FormFieldContract
 
     public function renderField(?Model $model = null): Collection
     {
+        if (!is_null($model)) {
+            $this->value(
+                $model->{$this->getName()}
+            );
+        }
+
         return collect([
-            $this
-                ->when(
-                    $model,
-                    fn (FormFieldContract $field) => $field->value(
-                        Arr::get($model?->toArray(), $field->getName())
-                    )
-                )
-                ->render(),
+            $this->render(),
         ]);
     }
 
@@ -268,16 +267,14 @@ abstract class FormField implements FormFieldContract
             return null;
         }
 
-        $class = $this->getClass($model);
-
-        $this->determinateDisabled($model);
-        $this->determinateRequired($model);
-
-        return $this->renderField($model)
+        return $this
+            ->determinateDisabled($model)
+            ->determinateRequired($model)
+            ->renderField($model)
             ->map(
                 fn (FieldContract $field) => $field
                     ->withAttributes($this->getAttributes() + [
-                            'class' => $class,
+                            'class' => $this->getClass($model),
                             'wire:model.debounce.500ms' => $field->name
                         ])
                     ->render()

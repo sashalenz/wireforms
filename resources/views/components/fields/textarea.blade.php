@@ -5,8 +5,8 @@
     :label="$label"
     :show-label="$showLabel"
     :help="$help"
+    :key="$key"
     {{ $attributes->whereDoesntStartWith(['data', 'x-', 'wire:model', 'wire:change']) }}
-    :wire:key="$key"
 >
     <textarea
         name="{{ $name }}"

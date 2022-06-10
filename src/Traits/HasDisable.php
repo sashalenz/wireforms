@@ -24,12 +24,12 @@ trait HasDisable
         return $this;
     }
 
-    private function determinateDisabled(?Model $model = null): void
+    private function determinateDisabled(?Model $model = null): self
     {
-        if (! is_callable($this->disabledCondition)) {
-            return;
+        if (is_callable($this->disabledCondition)) {
+            $this->disabled = (bool)call_user_func($this->disabledCondition, $model);
         }
 
-        $this->disabled = (bool)call_user_func($this->disabledCondition, $model);
+        return $this;
     }
 }

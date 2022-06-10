@@ -4,10 +4,13 @@
     'label',
     'required' => false,
     'showLabel' => true,
-    'help' => null
+    'help' => null,
+    'key' => null
 ])
-
-<fieldset {{ $attributes->class('space-y-1')->only(['class', 'wire:key']) }}>
+<fieldset
+    @if($key) wire:key="{{ $key }}" @endif
+    {{ $attributes->class('space-y-1')->only(['class', 'wire:key', 'wire:ignore']) }}
+>
     @if($showLabel)
         <label for="{{ $id }}" @class(['block text-sm text-gray-600', 'font-semibold' => $required])>
             {{ $label }}

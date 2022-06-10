@@ -13,10 +13,10 @@ trait HasChild
         ]);
     }
 
-    protected function fillWithHydrate($key, $value): void
+    protected function fillWithHydrate($key, $value = null): void
     {
         $this->fill([
-            $key => $value,
+            $key => $value === '' ? null : $value,
         ]);
 
         $method = Str::of($key)
@@ -30,7 +30,7 @@ trait HasChild
         }
     }
 
-    public function updatedChild($key, $value): void
+    public function updatedChild($key, $value = null): void
     {
         $this->validateField($key, $value);
 

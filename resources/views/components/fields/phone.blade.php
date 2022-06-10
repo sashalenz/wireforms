@@ -9,8 +9,8 @@
     :disabled="$disabled"
     :readonly="$readonly"
     :help="$help"
+    :key="$key"
     {{ $attributes->whereDoesntStartWith('wire:') }}
-    :wire:key="$key"
 >
     <div class="relative flex w-full"
          x-data="{

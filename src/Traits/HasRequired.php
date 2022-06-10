@@ -25,12 +25,12 @@ trait HasRequired
         return $this;
     }
 
-    private function determinateRequired(?Model $model = null): void
+    private function determinateRequired(?Model $model = null): self
     {
-        if (! is_callable($this->requiredCondition)) {
-            return;
+        if (is_callable($this->requiredCondition)) {
+            $this->required = (bool)call_user_func($this->requiredCondition, $model);
         }
 
-        $this->required = (bool)call_user_func($this->requiredCondition, $model);
+        return $this;
     }
 }

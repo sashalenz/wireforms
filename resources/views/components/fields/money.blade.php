@@ -5,8 +5,8 @@
     :label="$label"
     :show-label="$showLabel"
     :help="$help"
+    :key="$key"
     {{ $attributes->whereDoesntStartWith(['min', 'max', 'step', 'data', 'x-', 'wire:model', 'wire:change']) }}
-    :wire:key="$key"
 >
     <div class="relative flex w-full"
          x-data="{

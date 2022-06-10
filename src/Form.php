@@ -42,11 +42,6 @@ abstract class Form extends ModalComponent
             ->toArray();
     }
 
-    public function updating(string $key, $value = null): void
-    {
-        $this->validateField($key, $value);
-    }
-
     public function validateField(string $field, $value = null)
     {
         $formField = $this->fields
@@ -136,6 +131,7 @@ abstract class Form extends ModalComponent
             'fields' => $this->fields
                 ->map(fn (FormFieldContract $field) => $field->renderIt($this->model))
                 ->flatten(),
+
             'title' => collect([
                 $this->title(),
                 $this->model->getKey(),

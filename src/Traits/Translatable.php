@@ -39,16 +39,7 @@ trait Translatable
     public function renderField(?Model $model = null): Collection
     {
         if (! $this->translatable) {
-            return collect([
-                $this
-                    ->when(
-                        $model,
-                        fn (FormFieldContract $field) => $field->value(
-                            data_get($model?->toArray(), $field->getName())
-                        )
-                    )
-                    ->render(),
-            ]);
+            return parent::renderField($model);
         }
 
         return collect($this->translatableLocales)

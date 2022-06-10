@@ -5,23 +5,18 @@
     :label="$label"
     :show-label="$showLabel"
     :help="$help"
+    :key="$key"
+    wire:ignore
     {{ $attributes->whereDoesntStartWith(['wire:model', 'wire:change', 'x-']) }}
-    :wire:key="$key"
 >
     <div class="input-group"
          x-data="{
-            @if($attributes->whereStartsWith('wire:model')->first())
-            value: @entangle($attributes->wire('model')),
-            @else
             value: '{{ $value }}',
-            @endif
-            reset() {
-                value = null;
-                $refs.input.flatpickr().clear();
-                $dispatch('input');
-            }
          }"
-         wire:ignore>
+         @if($attributes->whereStartsWith('wire:model')->first())
+             x-init="$watch('value', value => $wire.emit('updatedChild', '{{ $attributes->whereStartsWith('wire:model')->first() }}', value))"
+        @endif
+    >
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             @isset($prepend)
                 {{ $prepend }}
@@ -34,7 +29,6 @@
         <input type="text"
                name="{{ $name }}"
                id="{{ $id }}"
-               :value="value"
                x-datetime
                x-model="value"
                x-ref="input"
@@ -51,11 +45,11 @@
                data-mode="{{ $mode }}"
                data-format="{{ $time ? $timeFormat : $format }}"
                @if($required) required="required" @endif
-               @disabled($disabled)
+            @disabled($disabled)
             {{ $attributes->whereStartsWith(['wire:change', 'x-']) }}
         >
         @if($allowClear && !$disabled)
-            <span class="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer" x-show="value" x-on:click.prevent="reset()">
+            <span class="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer" x-show="value" x-on:click.prevent="$refs.input._flatpickr.clear()">
                 <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
