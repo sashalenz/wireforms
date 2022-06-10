@@ -4,7 +4,6 @@ namespace Sashalenz\Wireforms\FormFields;
 
 use Closure;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Conditionable;
@@ -43,7 +42,7 @@ abstract class FormField implements FormFieldContract
     ) {
         $key = collect([
             $this->exceptFromModel ? null : 'model',
-            $name
+            $name,
         ])
             ->filter()
             ->implode('.');
@@ -267,6 +266,8 @@ abstract class FormField implements FormFieldContract
             return null;
         }
 
+        $class = $this->getClass($model);
+
         return $this
             ->determinateDisabled($model)
             ->determinateRequired($model)
@@ -274,7 +275,7 @@ abstract class FormField implements FormFieldContract
             ->map(
                 fn (FieldContract $field) => $field
                     ->withAttributes($this->getAttributes() + [
-                            'class' => $this->getClass($model),
+                            'class' => $class,
                             'wire:model.debounce.500ms' => $field->name
                         ])
                     ->render()

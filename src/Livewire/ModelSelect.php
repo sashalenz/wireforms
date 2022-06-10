@@ -53,7 +53,7 @@ abstract class ModelSelect extends Component
 
     protected $listeners = [
         'fillParent',
-        'changeModel'
+        'changeModel',
     ];
 
     public function fillParent(?string $value = null): void
