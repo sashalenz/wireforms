@@ -249,7 +249,7 @@ abstract class FormField implements FormFieldContract
 
     public function renderField(?Model $model = null): Collection
     {
-        if (!is_null($model)) {
+        if (! is_null($model)) {
             $this->value(
                 $model->{$this->getName()}
             );
@@ -276,7 +276,7 @@ abstract class FormField implements FormFieldContract
                 fn (FieldContract $field) => $field
                     ->withAttributes($this->getAttributes() + [
                             'class' => $class,
-                            'wire:model.debounce.500ms' => $field->name
+                            'wire:model.debounce.500ms' => $field->name,
                         ])
                     ->render()
             )
