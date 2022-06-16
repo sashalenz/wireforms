@@ -105,7 +105,6 @@ class NestedSetSelect extends ModelSelect
             )
             ->take($this->limit)
             ->get()
-            ->filter(fn ($item) => $item->sortedChildren->count())
             ->mapWithKeys(fn ($item) => [
                 $item->getKey() => [
                     'name' => $item->getDisplayName(),
