@@ -93,7 +93,7 @@ class NestedSetSelect extends ModelSelect
                 )
             )
             ->with([
-                'children' => fn ($query) => $query->tap(new SearchFilter($this->search))
+                'children' => fn ($query) => $query->tap(new SearchFilter($this->search)),
             ])
             ->withCount('children')
             ->orderBy(
@@ -108,7 +108,7 @@ class NestedSetSelect extends ModelSelect
                     'children' => $item->children->mapWithKeys(fn ($child) => [
                         $child->getKey() => $child->getDisplayName(),
                     ]),
-                    'childrenCount' => $item->children_count
+                    'childrenCount' => $item->children_count,
                 ],
             ]);
     }
