@@ -82,23 +82,20 @@ class NestedSetSelect extends ModelSelect
         return $this->searchQuery()
             ->whereNull('parent_id')
             ->when(
-                $this->searchable,
-                fn ($query) => $query
-                    ->orWhere(
-                        fn ($query) => $query
-                            ->tap(new SearchFilter($this->search))
-                            ->whereHas(
-                                'sortedChildren',
-                                fn ($query) => $query->tap(new SearchFilter($this->search))
-                            )
-                    )
+                $this->searchable && $this->search,
+                fn ($query) => $query->where(
+                    fn ($query) => $query
+                        ->tap(new SearchFilter($this->search))
+                        ->orWhereHas(
+                            'children',
+                            fn ($query) => $query->tap(new SearchFilter($this->search))
+                        )
+                )
             )
             ->with([
-                'sortedChildren' => fn ($query) => $query->when(
-                    $this->searchable && $this->search,
-                    fn ($query) => $query->tap(new SearchFilter($this->search))
-                ),
+                'children' => fn ($query) => $query->tap(new SearchFilter($this->search))
             ])
+            ->withCount('children')
             ->orderBy(
                 $this->orderBy ?? $this->getModelKeyNameProperty(),
                 $this->orderDir
@@ -108,9 +105,10 @@ class NestedSetSelect extends ModelSelect
             ->mapWithKeys(fn ($item) => [
                 $item->getKey() => [
                     'name' => $item->getDisplayName(),
-                    'children' => $item->sortedChildren->mapWithKeys(fn ($child) => [
+                    'children' => $item->children->mapWithKeys(fn ($child) => [
                         $child->getKey() => $child->getDisplayName(),
                     ]),
+                    'childrenCount' => $item->children_count
                 ],
             ]);
     }

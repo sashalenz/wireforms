@@ -61,7 +61,7 @@
                         aria-activedescendant="listbox-option-{{ $this->value }}"
                         class="max-h-60 pt-1 text-base leading-6 overflow-auto focus:outline-none sm:text-sm sm:leading-5"
                     >
-                        @forelse($this->results->filter(fn ($item) => count($item['children'])) as $key => $value)
+                        @forelse($this->results->filter(fn ($item) => $item['childrenCount']) as $key => $value)
                             <li id="listbox-optgroup-{{ $key }}"
                                 role="option"
                                 class="group uppercase text-xs text-gray-300 cursor-default select-none relative py-1 pl-3"
@@ -110,7 +110,7 @@
                                 </li>
                             @endif
                         @endforelse
-                        @foreach($this->results->reject(fn ($item) => count($item['children'])) as $key => $value)
+                        @foreach($this->results->reject(fn ($item) => $item['childrenCount']) as $key => $value)
                             <li id="listbox-option-{{ $key }}"
                                 role="option"
                                 class="group text-gray-900 focus:text-white focus:bg-primary-600 hover:text-white hover:bg-primary-600 cursor-pointer select-none relative py-2 pl-3 pr-9"
