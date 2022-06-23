@@ -17,7 +17,7 @@
             value: '{{ $value }}',
             mask: '+38 (099) 999-99-99',
             init() {
-                $watch('value', value => $wire.emit('updatedChild', '{{ $id }}', value.replace(/[^\d+]/g, '')))
+                $watch('value', value => $wire.emitSelf('updatedChild', '{{ $id }}', value.replace(/[^\d+]/g, '')))
             }
          }"
          x-init="init"

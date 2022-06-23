@@ -12,23 +12,29 @@
          x-data="{
             amount: '',
             value: @entangle($attributes->wire('model')),
-            currency: '',
+            currency: 'USD',
             update() {
                 try {
                     parsedValue = JSON.parse(this.value);
                     this.amount = Number.parseInt(parsedValue.amount) / 100;
                     this.currency = parsedValue.currency;
                 } catch (e) { console.log(e) };
+            },
+            updateCurrency() {
+                try {
+                    parsedValue = JSON.parse(this.value);
+                    this.currency = parsedValue.currency;
+                } catch (e) { console.log(e) };
             }
          }"
          x-init="
              update();
-             $watch('amount', value => (value && currency) && $wire.emit('updatedChild', '{{ $id }}', {
+             $watch('amount', value => (value && currency) && $wire.emitSelf('updatedChild', '{{ $id }}', {
                 amount: Number.parseFloat(value * 100).toFixed(0),
                 currency: currency
              }))
          "
-         @update-currency.window="update()"
+         @update-currency.window="updateCurrency()"
     >
         <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
             <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -40,7 +46,7 @@
         <input type="number"
                name="{{ $name }}"
                id="{{ $id }}"
-               x-model.lazy="amount"
+               x-model.debounce.1s="amount"
                @if($placeholder)
                    placeholder="{{ $placeholder }}"
                @endif

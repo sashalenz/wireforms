@@ -10,7 +10,7 @@
                 :aria-expanded="open ? 'true' : 'false'"
                 aria-labelledby="listbox-label"
                 x-on:click.prevent="open = (readonly) ? false : !open"
-                class="relative w-full border pl-3 pr-10 py-1.5 text-left cursor-pointer transition ease-in-out duration-150 sm:text-sm sm:leading-5 disabled:bg-gray-200"
+                class="relative w-full border pl-3 pr-10 py-1.5 text-left cursor-pointer transition ease-in-out duration-150 sm:text-sm sm:leading-5 disabled:bg-gray-200 rounded-sm"
                 :class="{'bg-gray-50 cursor-not-allowed': readonly, 'bg-white cursor-pointer focus:outline-none focus:shadow-full focus:shadow-primary-100/50': !readonly, 'border-primary-300 border-b-white': open, 'border-gray-200 focus:border-primary-300': !open }"
         >
             @if($this->selectedValue)

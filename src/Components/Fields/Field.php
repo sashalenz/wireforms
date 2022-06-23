@@ -15,7 +15,7 @@ abstract class Field extends Component implements FieldContract
 
     public function __construct(
         public string $name,
-        public $value,
+        public $value = null,
         public bool $required = false,
         public bool $disabled = false,
         public bool $readonly = false,

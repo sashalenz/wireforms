@@ -32,7 +32,9 @@ trait HasChild
 
     public function updatedChild($key, $value = null): void
     {
-        $this->validateField($key, $value);
+        if (method_exists($this, 'validateField')) {
+            $this->validateField($key, $value);
+        }
 
         $this->fillWithHydrate($key, $value);
     }

@@ -14,8 +14,8 @@
             value: '{{ $value }}',
          }"
          @if($attributes->whereStartsWith('wire:model')->first())
-             x-init="$watch('value', value => $wire.emit('updatedChild', '{{ $attributes->whereStartsWith('wire:model')->first() }}', value))"
-        @endif
+             x-init="$watch('value', value => $wire.emitSelf('updatedChild', '{{ $attributes->whereStartsWith('wire:model')->first() }}', value))"
+         @endif
     >
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             @isset($prepend)
