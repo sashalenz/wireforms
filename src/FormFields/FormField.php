@@ -34,18 +34,13 @@ abstract class FormField implements FormFieldContract
     protected ?Closure $displayCondition = null;
 
     public bool $exceptFromModel = false;
-    public string $wireModel;
+    public ?string $wireModel = null;
 
     public function __construct(
         protected string $name,
         protected ?string $label = null
     ) {
-        $key = collect([
-            $this->exceptFromModel ? null : 'model',
-            $name,
-        ])
-            ->filter()
-            ->implode('.');
+        $key = 'model.'.$name;
 
         $this->wireModel($key);
         $this->keyBy('field-'.$key);
@@ -86,7 +81,7 @@ abstract class FormField implements FormFieldContract
 
     public function exceptFromModel(): self
     {
-        $this->exceptFromModel = true;
+        $this->wireModel = null;
 
         return $this;
     }
