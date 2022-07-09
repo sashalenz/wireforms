@@ -31,7 +31,7 @@ class CustomLivewireField extends FormField
             [
                 'name' => $this->name,
                 'value' => $this->value,
-                'required' => $this->required
+                'required' => $this->required,
             ]
         );
     }
