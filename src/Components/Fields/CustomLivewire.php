@@ -4,7 +4,7 @@ namespace Sashalenz\Wireforms\Components\Fields;
 
 use Illuminate\Contracts\View\View;
 
-class Textarea extends Field
+class CustomLivewire extends Field
 {
     public function __construct(
         string $name,
@@ -17,7 +17,8 @@ class Textarea extends Field
         ?string $key = null,
         ?string $placeholder = null,
         ?string $help = null,
-        public int $rows = 2
+        public ?string $livewireComponent = null,
+        public array $params = []
     ) {
         parent::__construct(
             $name,
@@ -35,7 +36,7 @@ class Textarea extends Field
 
     public function render(): View
     {
-        return view('wireforms::components.fields.textarea')
+        return view('wireforms::components.fields.custom-livewire')
             ->with($this->data());
     }
 }

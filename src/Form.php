@@ -17,7 +17,7 @@ abstract class Form extends ModalComponent
     use HasChild;
     use HasDefaults;
 
-    public bool $parentModal = false;
+    public ?string $parentModal = null;
     private array $emitFields = [];
 
     abstract protected function fields(): Collection;
@@ -105,11 +105,11 @@ abstract class Form extends ModalComponent
                 'message' => __('wireforms::form.successfully_saved'),
             ]);
 
-            if ($this->parentModal) {
+            if (!is_null($this->parentModal)) {
                 $this->closeModalWithEvents([
-                    $this->parentModal => [
-                        'fillParent', [$this->model->getKey()],
-                    ],
+                    [
+                        'fillParent.' . $this->parentModal, [ $this->model->getKey() ]
+                    ]
                 ]);
             } else {
                 $this->closeModalWithEvents([

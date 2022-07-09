@@ -8,7 +8,7 @@ class Select extends Field
 {
     public function __construct(
         string $name,
-        $value,
+        $value = null,
         bool $required = false,
         bool $disabled = false,
         bool $readonly = false,
@@ -42,6 +42,7 @@ class Select extends Field
 
     public function render(): View
     {
-        return view('wireforms::components.fields.select')->with($this->data());
+        return view('wireforms::components.fields.select')
+            ->with($this->data());
     }
 }

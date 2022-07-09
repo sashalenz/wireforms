@@ -51,18 +51,12 @@ abstract class ModelSelect extends Component
         $this->searchable = $searchable;
     }
 
-    protected $listeners = [
-        'fillParent',
-        'changeModel',
-    ];
-
-    public function fillParent(?string $value = null): void
+    protected function getListeners(): array
     {
-        if ($this->value === $value) {
-            return;
-        }
-
-        $this->value = $value;
+        return [
+            'fillParent.' . $this->id => 'setSelected',
+            'changeModel'
+        ];
     }
 
     public function changeModel(?string $model = null): void
@@ -89,9 +83,14 @@ abstract class ModelSelect extends Component
     {
         return collect()
             ->when(
-                $this->createNewField && $this->search,
+                $this->createNewField,
                 fn ($collection) => $collection
-                    ->put('fillFields', [$this->createNewField => $this->search])
+                    ->when(
+                        $this->search,
+                        fn ($collection) => $collection->put('fillFields', [
+                            $this->createNewField => $this->search
+                        ])
+                    )
                     ->put('parentModal', $this->id)
             )
             ->toJson();
