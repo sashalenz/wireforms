@@ -125,19 +125,23 @@ abstract class Form extends ModalComponent
         }
     }
 
+    protected function renderTitle(): string
+    {
+        return collect([
+            $this->title(),
+            $this->model->getKey(),
+        ])
+            ->filter()
+            ->implode(' №');
+    }
+
     public function render(): View
     {
         return view('wireforms::form', [
             'fields' => $this->fields
                 ->map(fn (FormFieldContract $field) => $field->renderIt($this->model))
                 ->flatten(),
-
-            'title' => collect([
-                $this->title(),
-                $this->model->getKey(),
-            ])
-                ->filter()
-                ->implode(' №'),
+            'title' => $this->renderTitle(),
         ]);
     }
 }
