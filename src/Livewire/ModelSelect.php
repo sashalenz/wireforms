@@ -56,7 +56,7 @@ abstract class ModelSelect extends Component
         return [
             'fillParent' => 'setSelected',
             'fillParent.' . $this->id => 'setSelected',
-            'changeModel'
+            'changeModel',
         ];
     }
 
@@ -89,7 +89,7 @@ abstract class ModelSelect extends Component
                     ->when(
                         $this->search,
                         fn ($collection) => $collection->put('fillFields', [
-                            $this->createNewField => $this->search
+                            $this->createNewField => $this->search,
                         ])
                     )
                     ->put('parentModal', $this->id)

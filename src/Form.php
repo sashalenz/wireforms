@@ -105,11 +105,11 @@ abstract class Form extends ModalComponent
                 'message' => __('wireforms::form.successfully_saved'),
             ]);
 
-            if (!is_null($this->parentModal)) {
+            if (! is_null($this->parentModal)) {
                 $this->closeModalWithEvents([
                     [
-                        'fillParent.' . $this->parentModal, [ $this->model->getKey() ]
-                    ]
+                        'fillParent.' . $this->parentModal, [ $this->model->getKey() ],
+                    ],
                 ]);
             } else {
                 $this->closeModalWithEvents([
