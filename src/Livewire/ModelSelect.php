@@ -54,6 +54,7 @@ abstract class ModelSelect extends Component
     protected function getListeners(): array
     {
         return [
+            'fillParent' => 'setSelected',
             'fillParent.' . $this->id => 'setSelected',
             'changeModel'
         ];
