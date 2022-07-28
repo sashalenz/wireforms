@@ -12,7 +12,7 @@ class PasswordField extends FormField
     protected function render(): FieldContract
     {
         return Text::make(
-            name: $this->getNameOrWireModel(),
+            name: $this->getName(),
             value: $this->value,
             label: $this->label,
             type: 'password',
