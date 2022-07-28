@@ -7,7 +7,14 @@ use Sashalenz\Wireforms\Contracts\FieldContract;
 
 class PasswordField extends FormField
 {
-    public bool $exceptFromModel = true;
+    public function __construct(
+        protected string $name,
+        protected ?string $label = null
+    ) {
+        parent::__construct($name, $label);
+
+        $this->exceptFromModel();
+    }
 
     protected function render(): FieldContract
     {
